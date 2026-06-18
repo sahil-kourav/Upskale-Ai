@@ -16,7 +16,7 @@ export async function register({ fullName, phone, email, password }) {
 
     return response.data;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
@@ -28,8 +28,8 @@ export async function login({ email, password }) {
     });
 
     return response.data;
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -38,8 +38,8 @@ export async function logout() {
     const response = await api.post(`/api/auth/logout`);
 
     return response.data;
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -48,7 +48,7 @@ export async function getMe() {
     const response = await api.get(`/api/auth/get-me`);
 
     return response.data;
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    throw error;
   }
 }

@@ -1,8 +1,7 @@
-const userModel = require('../models/user.model');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const tokenBlacklistModel = require('../models/blacklist.model');
-
+const userModel = require("../models/user.model");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const tokenBlacklistModel = require("../models/blacklist.model");
 
 /**
  * @name registerUser
@@ -11,50 +10,61 @@ const tokenBlacklistModel = require('../models/blacklist.model');
  * @access Public
  */
 async function registerUser(req, res) {
-    const { phone, fullName, email, password } = req.body;
+  const { phone, fullName, email, password } = req.body;
 
-    if (!fullName || !phone || !email || !password) {
-        return res.status(400).json({ message: 'Please provide all required fields' });
+  if (!fullName || !phone || !email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Please provide all required fields" });
+  }
+
+    const emailExists = await userModel.findOne({ email });
+    if (emailExists) {
+      return res.status(409).json({ message: "User already exists with this email" });
     }
 
-    const existingUser = await userModel.findOne({
-        $or: [{ phone }, { email }]
-    });
+    const phoneExists = await userModel.findOne({ phone });
 
-    if (existingUser) {
-        return res.status(400).json({ message: 'User already exists with this phone or email' });
+    if (phoneExists) {
+      return res.status(409).json({ message: "User already exists with this phone number" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await userModel.create({
-        phone,
-        fullName,
-        email,
-        password: hashedPassword
-    });
+  const user = await userModel.create({
+    phone,
+    fullName,
+    email,
+    password: hashedPassword,
+  });
 
-    const token = jwt.sign({
-        id: user._id,
-        phone: user.phone,
-        email: user.email
-    }, process.env.JWT_SECRET, { expiresIn: '6d' });
+  const token = jwt.sign(
+    {
+      id: user._id,
+      fullName: user.fullName,
+      phone: user.phone,
+      email: user.email,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "6d" },
+  );
 
-    res.cookie('token', token, {
-        httpOnly: true,
-        maxAge: 6 * 24 * 60 * 60 * 1000 // 6 days
-    });
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure:false,
+    sameSite:"lax",
+    maxAge: 6 * 24 * 60 * 60 * 1000, // 6 days
+  });
 
-    res.status(201).json({
-        message: 'User registered successfully',
-        user: {
-            id: user._id,
-            phone: user.phone,
-            fullName: user.fullName,
-            email: user.email
-        }
-    });
-
+  res.status(201).json({
+    message: "User registered successfully",
+    user: {
+      id: user._id,
+      phone: user.phone,
+      fullName: user.fullName,
+      email: user.email,
+    },
+  });
 }
 
 /**
@@ -64,47 +74,54 @@ async function registerUser(req, res) {
  * @access Public
  */
 async function loginUser(req, res) {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    if ((!email) || !password) {
-        return res.status(400).json({ message: 'Please provide email and password' });
-    }
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Please provide email and password" });
+  }
 
-    const user = await userModel.findOne({
-        email
-    });
+  const user = await userModel.findOne({
+    email,
+  }).select("+password");;
 
-    if (!user) {
-        return res.status(400).json({ message: 'Invalid email or password' });
-    }
+  if (!user) {
+    return res.status(401).json({ message: "Invalid email or password" });
+  }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password)
+  const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
-        return res.status(400).json({ message: 'Invalid email or password' });
-    }
+  if (!isPasswordValid) {
+    return res.status(401).json({ message: "Invalid email or password" });
+  }
 
-    const token = jwt.sign({
-        id: user._id,
-        phone: user.phone,
-        email: user.email
-    }, process.env.JWT_SECRET, { expiresIn: '6d' });
+  const token = jwt.sign(
+    {
+      id: user._id,
+      phone: user.phone,
+      email: user.email,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "6d" },
+  );
 
-    res.cookie('token', token, {
-        httpOnly: true,
-        maxAge: 6 * 24 * 60 * 60 * 1000 // 6 days
-    });
+  res.cookie("token", token, {
+    httpOnly: true,
+     secure:false,
+     sameSite:"lax",
+    maxAge: 6 * 24 * 60 * 60 * 1000, // 6 days
+  });
 
-    res.status(200).json({
-        message: 'User logged in successfully',
-        user: {
-            id: user._id,
-            phone: user.phone,
-            fullName: user.fullName,
-            email: user.email
-        }
-    });
-
+  res.status(200).json({
+    message: "User logged in successfully",
+    user: {
+      id: user._id,
+      phone: user.phone,
+      fullName: user.fullName,
+      email: user.email,
+    },
+  });
 }
 
 /**
@@ -114,15 +131,15 @@ async function loginUser(req, res) {
  * @access Public
  */
 async function logoutUser(req, res) {
-    const token = req.cookies.token;
+  const token = req.cookies.token;
 
-    if (token) {
-        await tokenBlacklistModel.create({ token });
-    }
+  if (token) {
+    await tokenBlacklistModel.create({ token });
+  }
 
-    res.clearCookie('token');
+  res.clearCookie("token");
 
-    res.status(200).json({ message: 'User logged out successfully' });
+  res.status(200).json({ message: "User logged out successfully" });
 }
 
 /**
@@ -132,26 +149,26 @@ async function logoutUser(req, res) {
  * @access Private
  */
 async function getUser(req, res) {
- const user = await userModel.findById(req.user.id).select('-password');
+  const user = await userModel.findById(req.user.id).select("-password");
 
-    if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-    }   
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
 
-    res.status(200).json({
-        message: 'User information fetched successfully',
-        user: {
-            id: user._id,
-            phone: user.phone,
-            fullName: user.fullName,
-            email: user.email
-        }
-    });
+  res.status(200).json({
+    message: "User information fetched successfully",
+    user: {
+      id: user._id,
+      phone: user.phone,
+      fullName: user.fullName,
+      email: user.email,
+    },
+  });
 }
 
 module.exports = {
-    registerUser,
-    loginUser,
-    logoutUser,
-    getUser
-}
+  registerUser,
+  loginUser,
+  logoutUser,
+  getUser,
+};

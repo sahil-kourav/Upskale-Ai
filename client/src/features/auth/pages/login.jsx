@@ -1,43 +1,64 @@
+import { Link } from "react-router";
+import { PencilSparkles } from "lucide-react";
 import { useState } from "react";
-import { FiMail, FiLock, FiX, FiEye, FiEyeOff } from "react-icons/fi";
+import {
+  FiMail,
+  FiArrowRight,
+  FiLock,
+  FiX,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router";
+import { notify } from "../../../utils/toast";
 import { useAuth } from "../hooks/useAuth";
-import Loading from "../components/Loading";
+import Loading from "../../../components/Loading";
 
 export default function Login() {
   const navigate = useNavigate();
 
-  const { loading, handleLogin } = useAuth();
+  const { handleLogin } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // alert(`Logging in as ${form.email}`);
-    handleLogin({ email, password})
-    navigate("/");
+
+    const toastId = notify.loading("Logging in...");
+
+    try {
+      await handleLogin({
+        email,
+        password,
+      });
+
+      notify.success(toastId, "Welcome back 👋");
+
+      navigate("/", {
+        replace: true,
+      });
+    } catch (err) {
+      notify.error(
+        toastId,
+
+        err?.response?.data?.message || "Invalid email or password",
+      );
+    }
   };
 
-  if(loading){
-    return <Loading />
-  }
-
-
-
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
-      {/* Background blobs */}
-      <div className="absolute top-20 left-20 w-72 h-72 bg-white opacity-5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Modal Card */}
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm mx-4 relative z-10">
         {/* Close Button */}
         <button
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition p-1 rounded-full hover:bg-gray-100"
+          type="button"
+          onClick={() => navigate("/")}
+          className="absolute top-4 right-4 text-gray-700 cursor-pointer hover:text-gray-800 transition p-1 rounded-full hover:bg-gray-200"
           aria-label="Close"
         >
           <FiX size={18} />
@@ -45,16 +66,29 @@ export default function Login() {
 
         {/* Logo */}
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-extrabold text-gray-900 font-stretch-extra-expanded">
-            JOBREADY AI
-          </h1>
-          <p className="text-sm text-gray-400 mt-1">
+          
+            <p className="inline-flex items-center group">
+              {/* Logo */}
+              <div className="flex items-center justify-center transition mr-2 group-hover:scale-105">
+                <PencilSparkles className="w-5 h-5 text-gray-800" />
+              </div>
+
+              <div>
+                <p className="text-gray-800 text-[20px] font-semibold tracking-tight">
+                  Upskale AI
+                </p>
+              </div>
+            </p>
+          <p className="text-sm text-gray-500 mt-2">
             Login to your account and get job ready with AI
           </p>
         </div>
 
         {/* Google Button */}
-        <button className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-xl py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 active:scale-95 transition-all duration-150 mb-4">
+        <button
+          type="button"
+          className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-xl py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 active:scale-95 transition-all duration-150 mb-4"
+        >
           <FcGoogle size={20} />
           Continue with Google
         </button>
@@ -65,9 +99,6 @@ export default function Login() {
           <span className="text-xs text-gray-400 font-medium">OR</span>
           <div className="flex-1 h-px bg-gray-200" />
         </div>
-
-        {/* Login Heading */}
-        {/* <h2 className="text-sm font-semibold text-gray-900 mb-3">Login to your account</h2> */}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -81,7 +112,8 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email address"
               required
-              className="flex-1 text-sm text-gray-800 placeholder-gray-400 outline-none bg-transparent"
+              autoComplete="email"
+              className="flex-1 text-sm text-gray-800 placeholder-gray-400 outline-none bg-transparent autofill:shadow-[inset_0_0_0px_1000px_white] autofill:text-gray-800"
             />
           </div>
 
@@ -95,30 +127,35 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               required
+              autoComplete="current-password"
               className="flex-1 text-sm text-gray-800 placeholder-gray-400 outline-none bg-transparent"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="text-gray-400 hover:text-gray-600 transition"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="text-gray-400 cursor-pointer hover:text-gray-600 transition"
             >
               {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
             </button>
           </div>
 
-          {/* Forgot Password */}
-          {/* <div className="text-right">
-            <a href="#" className="text-xs text-gray-500 hover:text-gray-900 hover:underline transition">
-              Forgot password?
-            </a>
-          </div> */}
-
-          {/* Login Button */}
           <button
             type="submit"
-            className="w-full bg-gray-900 text-white text-sm font-semibold py-3 rounded-xl hover:bg-black active:scale-95 transition-all duration-150 mt-1"
+            disabled={loading}
+            className="w-full group flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 cursor-pointer text-white text-sm font-semibold py-2.5 rounded-xl hover:opacity-90 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-150 mt-2 shadow-lg shadow-violet-500/25"
           >
-            Login
+            {loading ? (
+              <>Signing in...</>
+            ) : (
+              <>
+                Login in
+                <FiArrowRight
+                  size={15}
+                  className="group-hover:translate-x-0.5 transition-transform"
+                />
+              </>
+            )}
           </button>
         </form>
 
@@ -127,7 +164,7 @@ export default function Login() {
           Don't have an account?{" "}
           <button
             onClick={() => navigate("/register")}
-            className="text-gray-900 font-semibold hover:underline"
+            className="text-gray-900 cursor-pointer font-semibold hover:underline"
           >
             Sign up
           </button>
