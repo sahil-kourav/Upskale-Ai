@@ -27,6 +27,9 @@ router.get('/report/:interviewId', authMiddleware.authUser, interviewController.
 router.get('/', authMiddleware.authUser, interviewController.getAllInterviewReportsController)
  
 
+
+router.post('/resume/pdf/:interviewReportId', authMiddleware.authUser, interviewController.generateResumePdfController)
+
 module.exports = router
 
 
