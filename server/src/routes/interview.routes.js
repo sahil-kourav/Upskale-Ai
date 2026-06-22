@@ -1,6 +1,6 @@
 const express = require('express');
 const authMiddleware = require("../middleware/auth.middleware")
-const upload = require("../middleware/file.middleware")
+const memoryUpload = require("../middleware/memoryUpload")
 const interviewController = require('../controllers/interview.controller')
 const router = express.Router()
 
@@ -10,7 +10,7 @@ const router = express.Router()
  * @access Private
  */
 
-router.post('/', authMiddleware.authUser, upload.single("resume"), interviewController.generateInterviewReportController)
+router.post('/', authMiddleware.authUser, memoryUpload.single("resume"), interviewController.generateInterviewReportController)
 
 /**
  * @route GET /api/interview/report/:interviewId

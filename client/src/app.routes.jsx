@@ -7,7 +7,10 @@ import Reports from "./features/interview/pages/Reports";
 import CreateReport from "./features/interview/pages/CreateReport";
 import InterviewReport from "./features/interview/pages/InterviewReport";
 import Protected from "./components/Protected";
-
+import MockInterviewPage from "./features/mock_Interview/pages/mock_interview_page"
+import MockInterviewHistory from "./features/mock_Interview/pages/mock_interview_history"
+import MockInterviewReport from "./features/mock_Interview/pages/mock_interview_report"
+import Pricing from "./features/mock_Interview/components/Pricing"
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +58,38 @@ export const router = createBrowserRouter([
           </Protected>
         ),
       },
+      {
+        path: "/mock-interview",
+        element: (
+          <Protected>
+            <MockInterviewPage />
+          </Protected>
+        )
+      },
+      {
+        path: "/mock-interview-history",
+        element: (
+          <Protected>
+            <MockInterviewHistory />
+          </Protected>
+        )
+      },
+      {
+        path: "/mock-interview-report/:id",
+        element: (
+          <Protected> 
+            <MockInterviewReport />
+          </Protected>
+        )
+      },
+      {
+        path: "/pricing",
+        element: (
+          <Protected>
+            <Pricing />
+          </Protected>
+        )
+      }
     ],
   },
 ]);

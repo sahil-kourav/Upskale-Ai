@@ -14,12 +14,14 @@ app.use(cors({
 /* require all the routes here */
 const authRouter = require("./routes/auth.routes")
 const interviewRouter = require("./routes/interview.routes")
-
+const mockRouter = require("./routes/mock_interview.routes")
+const paymentRouter = require("./routes/payment.routes")
 
 /* using all the routes here */
 app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
-
+app.use("/api/mock-interview", mockRouter)
+app.use("/api/payment", paymentRouter)
 
 
 module.exports = app

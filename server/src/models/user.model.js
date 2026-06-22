@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         select: false, 
     },
+    credits: {
+        type: Number,
+        default: 100,
+    } 
 }, { timestamps: true });
 
 const userModel = mongoose.model('user', userSchema);
