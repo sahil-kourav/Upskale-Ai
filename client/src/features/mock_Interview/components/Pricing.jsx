@@ -62,7 +62,7 @@ const Pricing = () => {
       const amount = plan.id === "go" ? 299 : plan.id === "pro" ? 599 : 0;
 
       const response = await axios.post(
-        "http://localhost:8080/api/payment/create",
+        `${import.meta.env.VITE_SERVER_URL}/api/payment/create`,
         {
           planId: plan.id,
           amount: amount,
@@ -84,7 +84,7 @@ const Pricing = () => {
         handler: async function (response) {
           try {
             const verifyResponse = await axios.post(
-              "http://localhost:8080/api/payment/verify",
+              `${import.meta.env.VITE_SERVER_URL}/api/payment/verify`,
               {
                 razorpayOrderId: response.razorpay_order_id,
                 razorpayPaymentId: response.razorpay_payment_id,

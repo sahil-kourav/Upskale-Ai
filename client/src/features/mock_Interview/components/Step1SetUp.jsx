@@ -45,9 +45,7 @@ const startInterview = async () => {
     notify.error(
       toastId,
 
-      err?.response?.data?.message ||
-
-      "Oops insufficient credits — you need 50 credits to continue"
+      err?.response?.data?.message || "Oops insufficient credits — you need 50 credits to continue"
     );
   }
 };
