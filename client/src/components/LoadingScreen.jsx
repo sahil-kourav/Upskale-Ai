@@ -25,7 +25,7 @@ export function LoadingScreen() {
   }, []);
 
   return (
-    <div className="fixed inset-0 w-screen h-screen bg-[#0d1117] flex flex-col items-center justify-center">
+    <div className="fixed inset-0 h-screen bg-[#0d1117] flex flex-col items-center justify-center">
       {/* Logo */}
       <div className="flex items-center gap-2 mb-5">
          <p className="inline-flex items-center group">

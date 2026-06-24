@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { FaArrowLeft, FaCheckCircle } from "react-icons/fa";
+import { FaCheckCircle } from "react-icons/fa";
 import { motion } from "motion/react";
 import axios from "axios";
 import { useAuth } from "../../auth/hooks/useAuth";
@@ -59,7 +59,7 @@ const Pricing = () => {
   const handlePayment = async (plan) => {
     try {
       setLoadingPlan(plan.id);
-      const amount = plan.id === "go" ? 199 : plan.id === "pro" ? 399 : 0;
+      const amount = plan.id === "go" ? 299 : plan.id === "pro" ? 599 : 0;
 
       const response = await axios.post(
         "http://localhost:8080/api/payment/create",
@@ -123,18 +123,11 @@ const Pricing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 py-16 px-6">
+    <div className="min-h-screen bg-[#161b27] py-16 px-6">
       <div className="max-w-6xl mx-auto mb-14 flex items-start gap-4">
-        <button
-          onClick={() => navigate("/")}
-          className="mt-2 p-3 rounded-full bg-white shadow hover:shadow-md transition"
-        >
-          <FaArrowLeft className="text-gray-600" />
-        </button>
-
-        <div className="text-center w-full">
-          <h1 className="text-4xl font-bold text-gray-800">Choose Your Plan</h1>
-          <p className="text-gray-500 mt-3 text-lg">
+        <div className="text-left sm:text-center w-full">
+          <h1 className="text-4xl font-semibold text-gray-100">Choose Your Plan</h1>
+          <p className="text-gray-400 mt-3 text-lg">
             Flexible pricing to match your interview preparation
           </p>
         </div>
@@ -151,50 +144,50 @@ const Pricing = () => {
                 !plan.default ? { scale: isSelected ? 1.05 : 1.02 } : {}
               }
               onClick={() => !plan.default && setSelectedPlan(plan.id)}
-              className={`relative rounded-3xl p-6 bg-white border-2 transition-all duration-300
+              className={`relative rounded-3xl p-6 bg-[#1c2333] border-2 transition-all duration-300
                 ${
                   isSelected
-                    ? "border-emerald-500 shadow-2xl shadow-emerald-200/60 ring-4 ring-emerald-100 scale-105 z-10"
-                    : "border-gray-200 shadow-md hover:border-emerald-200 hover:shadow-lg"
+                    ? "border-emerald-500 shadow-2xl shadow-emerald-500/20 ring-4 ring-emerald-500/20 scale-105 z-10"
+                    : "border-[#2a3349] shadow-md hover:border-emerald-500/40 hover:shadow-lg"
                 }
                 ${plan.default ? "cursor-default" : "cursor-pointer"}
               `}
             >
               {/* Selected indicator - sits on top so it's unmistakable */}
               {isSelected && (
-                <div className="absolute -top-3 -left-3 bg-emerald-500 text-white rounded-full p-2 shadow-lg">
+                <div className="absolute -top-3 -left-3 bg-emerald-500 text-white rounded-full p-2 shadow-lg shadow-emerald-500/40">
                   <FaCheckCircle className="text-sm" />
                 </div>
               )}
 
               {/* Badge */}
               {plan.badge && (
-                <div className="absolute top-6 right-6 bg-emerald-600 text-white text-xs px-4 py-1 rounded-full shadow">
+                <div className="absolute top-6 right-6 bg-emerald-500 text-white text-xs px-4 py-1 rounded-full shadow shadow-emerald-500/30">
                   {plan.badge}
                 </div>
               )}
 
               {/* Default Tag */}
               {plan.default && (
-                <div className="absolute top-6 right-6 bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full">
+                <div className="absolute top-6 right-6 bg-[#2a3349] text-gray-300 text-xs px-3 py-1 rounded-full">
                   Default
                 </div>
               )}
 
-              <h3 className="text-xl font-semibold text-gray-800">
+              <h3 className="text-xl font-semibold text-gray-100">
                 {plan.name}
               </h3>
 
               {/* Price */}
               <div className="mt-4">
-                <span className="text-3xl font-bold text-emerald-600">
+                <span className="text-3xl font-bold text-emerald-400">
                   {plan.price}
                 </span>
-                <p className="text-gray-500 mt-1">{plan.credits} Credits</p>
+                <p className="text-gray-400 mt-1">{plan.credits} Credits</p>
               </div>
 
               {/* Description */}
-              <p className="text-gray-500 mt-4 text-sm leading-relaxed">
+              <p className="text-gray-400 mt-4 text-sm leading-relaxed">
                 {plan.description}
               </p>
 
@@ -202,8 +195,8 @@ const Pricing = () => {
               <div className="mt-6 space-y-3 text-left">
                 {plan.features.map((feature, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <FaCheckCircle className="text-emerald-500 text-sm" />
-                    <span className="text-gray-700 text-sm">{feature}</span>
+                    <FaCheckCircle className="text-emerald-400 text-sm" />
+                    <span className="text-gray-300 text-sm">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -218,10 +211,10 @@ const Pricing = () => {
                       handlePayment(plan);
                     }
                   }}
-                  className={`w-full mt-8 py-2.5 rounded-xl text-gray-900 font-normal cursor-pointer transition ${
+                  className={`w-full mt-8 py-2.5 rounded-xl font-normal cursor-pointer transition ${
                     isSelected
-                      ? "bg-emerald-600 text-white hover:opacity-90"
-                      : " border border-gray-300 hover:bg-emerald-50"
+                      ? "bg-emerald-500 text-white hover:bg-emerald-400"
+                      : "border border-[#2a3349] text-gray-300 hover:bg-emerald-500/10 hover:border-emerald-500/40"
                   }`}
                 >
                   {loadingPlan === plan.id

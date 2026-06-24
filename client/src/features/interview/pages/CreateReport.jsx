@@ -3,6 +3,7 @@ import { useInterview } from "../hooks/useInterview.js";
 import { useNavigate } from "react-router";
 import LoadingScreen from "../../../components/LoadingScreen.jsx";
 import { CloudUpload, X } from 'lucide-react'
+import { notify } from "../../../utils/toast";
 
 const STEPS = [
   { title: "Paste job description", sub: "Tell the AI what role you're applying for." },
@@ -23,25 +24,106 @@ export default function CreateReport() {
 
   const fileRef = useRef();
 
-  const handleFile = (file) => {
-    if (file?.type === "application/pdf") setResumeFile(file);
-  };
+const handleFile = (file) => {
+  if (!file) return;
 
-  const handleGenerate = async () => {
-    if (!jobDescription || !selfDescription || !resumeFile) {
-      alert("Please fill all fields");
-      return;
-    }
-    try {
-      setGenerating(true);
-      const data = await generateReport({ jobDescription, selfDescription, resumeFile });
-      navigate(`/interview/${data._id}`);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setGenerating(false);
-    }
-  };
+  if (file.type !== "application/pdf") {
+    notify.error(
+      notify.loading(),
+      "Only PDF files are allowed"
+    );
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    notify.error(
+      notify.loading(),
+      "Resume must be under 5 MB"
+    );
+    return;
+  }
+
+  setResumeFile(file);
+
+};
+
+  // const handleGenerate = async () => {
+  //   if (!jobDescription || !selfDescription || !resumeFile) {
+  //     alert("Please fill all fields");
+  //     return;
+  //   }
+  //   try {
+  //     setGenerating(true);
+  //     const data = await generateReport({ jobDescription, selfDescription, resumeFile });
+  //     navigate(`/interview/${data._id}`);
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     setGenerating(false);
+  //   }
+  // };
+
+
+const handleGenerate = async () => {
+
+  if (!jobDescription.trim()) {
+    notify.error(
+      notify.loading(),
+      "Please enter job description"
+    );
+    return;
+  }
+
+  if (!resumeFile) {
+    notify.error(
+      notify.loading(),
+      "Please upload resume"
+    );
+    return;
+  }
+
+  if (!selfDescription.trim()) {
+    notify.error(
+      notify.loading(),
+      "Tell us about yourself"
+    );
+    return;
+  }
+
+  const toastId =
+    notify.loading(
+      "Generating interview report..."
+    );
+  try {
+
+    setGenerating(true);
+
+    const data =
+      await generateReport({
+        jobDescription,
+        selfDescription,
+        resumeFile,
+      });
+
+    notify.success(
+      toastId,
+      "AI report ready! (-50 Credits)"
+    );
+    navigate(
+      `/interview/${data._id}`
+    );
+  } catch (err) {
+    notify.error(
+      toastId,
+      err?.response?.data?.error ||
+      "Failed to generate report"
+    );
+
+  } finally {
+    setGenerating(false);
+  }
+};
+
 
   const fileSizeLabel = resumeFile
     ? resumeFile.size > 1048576
@@ -207,6 +289,7 @@ export default function CreateReport() {
                 Generate plan
                 <span className="material-symbols-outlined text-sm">→</span>
               </button>
+              
             )}
           </div>
         </div>

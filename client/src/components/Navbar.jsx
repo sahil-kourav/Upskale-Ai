@@ -1,196 +1,53 @@
-// import { useEffect, useState } from "react";
-// import { Link, useNavigate } from "react-router";
-// import { useAuth } from "../features/auth/hooks/useAuth";
-// import { PencilSparkles } from "lucide-react";
-// import Loading from "./Loading";
-// import { notify } from "../utils/toast";
-
-// export default function Navbar() {
-//   const { user, loading, handleLogout } = useAuth();
-//   const [scrolled, setScrolled] = useState(false);
-
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     const onScroll = () => setScrolled(window.scrollY > 20);
-
-//     window.addEventListener("scroll", onScroll);
-
-//     return () => window.removeEventListener("scroll", onScroll);
-//   }, []);
-
-//   const logoutUser = async () => {
-//     try {
-//       await handleLogout();
-
-//       notify.success(notify.loading(), "Logged out");
-
-//       navigate("/", {
-//         replace: true,
-//       });
-//     } catch {
-//       notify.error(notify.loading(), "Logout failed");
-//     }
-//   };
-
-//   const userLinks = [
-//     {
-//       name: "Home",
-//       path: "/",
-//     },
-//     {
-//       name: "Reports",
-//       path: "/reports",
-//     },
-//     {
-//       name: "Create Report",
-//       path: "/create-report",
-//     },
-//     {
-//       name: "Mock Interview",
-//       path: "/mock-interview",
-//     },
-//     {
-//       name: "Mock Interview History",
-//       path: "/mock-interview-history",
-//     },
-//     {
-//       name: "Pricing",
-//       path: "/pricing",
-//     }
-//   ];
-
-//   if (loading) return null;
-
-//   return (
-//     <nav
-//       className={`fixed top-0 z-50 w-full transition ${
-//         scrolled
-//           ? "bg-[#0a0a12]/40 border-b border-white/5 backdrop-blur"
-//           : "bg-transparent"
-//       }`}
-//     >
-//       <div className="max-w-7xl mx-auto h-16 px-6 flex items-center justify-between">
-//         {/* Logo */}
-//         <Link to="/" className="inline-flex items-center group">
-//           {/* Logo */}
-//           <div className="flex items-center justify-center transition mr-2 group-hover:scale-105">
-//             <PencilSparkles className="w-5 h-5" />
-//           </div>
-
-//           <div>
-//             <h3 className="text-gray-300 text-lg font-semibold tracking-tight">
-//               Upskale AI
-//             </h3>
-//           </div>
-//         </Link>
-
-//         {/* Nav */}
-//         <div className="hidden md:flex items-center gap-8">
-//           {user &&
-//              userLinks.map((item) => (
-//                 <Link
-//                   key={item.name}
-//                   to={item.path}
-//                   className="text-md text-gray-300 hover:text-white"
-//                 >
-//                   {item.name}
-//                 </Link>
-//               ))}
-//         </div>
-
-//         {/* Right */}
-//         {!loading && (
-//           <div className="flex gap-3">
-//             {!user ? (
-//               <>
-//                 <button
-//                   onClick={() => navigate("/login")}
-//                   className="text-gray-300 cursor-pointer px-4 py-2"
-//                 >
-//                   Login
-//                 </button>
-
-//                 <button
-//                   onClick={() => navigate("/register")}
-//                   className="bg-indigo-600 hover:bg-indigo-700 cursor-pointer px-5 py-2 rounded-lg text-white"
-//                 >
-//                   Get Started
-//                 </button>
-//               </>
-//             ) : (
-//               <button
-//                 onClick={logoutUser}
-//                 className="
-//     flex items-center gap-2
-//     px-5 py-1.5
-//     rounded-xl 
-//     border border-[#2a3348]
-//      cursor-pointer
-//     text-gray-200
-//     shadow-sm
-//     transition-all duration-200
-//     hover:bg-[#0d111c]
-//     hover:border-red-500/40
-//     hover:text-red-400
-//     active:scale-[0.98]
-//   "
-//               >
-//                 Logout
-//               </button>
-//             )}
-//           </div>
-//         )}
-//       </div>
-//     </nav>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../features/auth/hooks/useAuth";
-import { PencilSparkles, Coins } from "lucide-react";
-import Loading from "./Loading";
+import {
+  PencilSparkles,
+  Coins,
+  Menu,
+  X,
+} from "lucide-react";
 import { notify } from "../utils/toast";
 
 export default function Navbar() {
   const { user, loading, handleLogout } = useAuth();
+
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
 
     window.addEventListener("scroll", onScroll);
 
-    return () => window.removeEventListener("scroll", onScroll);
+    return () =>
+      window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   const logoutUser = async () => {
     try {
+      const id = notify.loading("Logging out...");
+
       await handleLogout();
 
-      notify.success(notify.loading(), "Logged out");
+      notify.success(id, "Logged out");
 
-      navigate("/", {
-        replace: true,
-      });
+      navigate("/");
     } catch {
       notify.error(notify.loading(), "Logout failed");
     }
   };
 
-  const userLinks = [
+  const links = [
     {
       name: "Home",
       path: "/",
@@ -200,11 +57,11 @@ export default function Navbar() {
       path: "/reports",
     },
     {
-      name: "Create Report",
+      name: "Create",
       path: "/create-report",
     },
     {
-      name: "Mock Interview",
+      name: "Interview",
       path: "/mock-interview",
     },
     {
@@ -213,100 +70,219 @@ export default function Navbar() {
     },
   ];
 
+  const isActive = (path) =>
+    path === "/"
+      ? location.pathname === "/"
+      : location.pathname.startsWith(path);
+
   if (loading) return null;
 
   return (
-    <nav
-      className={`fixed top-0 z-50 w-full transition ${
-        scrolled
-          ? "bg-[#0a0a12]/40 border-b border-white/5 backdrop-blur"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto h-16 px-6 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="inline-flex items-center group">
-          <div className="flex items-center justify-center transition mr-2 group-hover:scale-105">
-            <PencilSparkles className="w-5 h-5" />
-          </div>
+    <>
+      <nav
+        className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+          scrolled
+            ? "backdrop-blur-xl bg-[#050814]/70 border-b border-white/10"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto h-16 px-4 sm:px-6 flex items-center justify-between">
 
-          <div>
-            <h3 className="text-gray-300 text-lg font-semibold tracking-tight">
+          {/* Logo */}
+          <Link
+            to="/"
+            className="flex items-center gap-2"
+          >
+            <PencilSparkles
+              className="w-5 h-5 text-white"
+            />
+
+            <span className="text-white font-semibold">
               Upskale AI
-            </h3>
-          </div>
-        </Link>
+            </span>
+          </Link>
 
-        {/* Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {user &&
-            userLinks.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className="text-md text-gray-300 hover:text-white"
-              >
-                {item.name}
-              </Link>
-            ))}
-        </div>
+          {/* Desktop Nav */}
+          {user && (
+            <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 gap-7">
+              {links.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`text-sm transition ${
+                    isActive(item.path)
+                      ? "text-white"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          )}
 
-        {/* Right */}
-        {!loading && (
-          <div className="flex items-center gap-3">
+          {/* Desktop Right */}
+          <div className="hidden md:flex items-center gap-3">
+
             {!user ? (
               <>
                 <button
-                  onClick={() => navigate("/login")}
-                  className="text-gray-300 cursor-pointer px-4 py-2"
+                  onClick={() =>
+                    navigate("/login")
+                  }
+                  className="text-gray-300"
                 >
                   Login
                 </button>
 
                 <button
-                  onClick={() => navigate("/register")}
-                  className="bg-indigo-600 hover:bg-indigo-700 cursor-pointer px-5 py-2 rounded-lg text-white"
+                  onClick={() =>
+                    navigate("/register")
+                  }
+                  className="px-5 py-2 rounded-xl bg-indigo-600 text-white"
                 >
                   Get Started
                 </button>
               </>
             ) : (
               <>
-                {/* Credits pill — tap to top up on the pricing page */}
                 <Link
                   to="/pricing"
-                  title="Buy more credits"
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-medium transition hover:bg-emerald-500/20 hover:border-emerald-500/50 active:scale-[0.98]"
+                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20"
                 >
-                  <Coins className="w-4 h-4" />
-                  {user.credits ?? 0}
-                  <span className="hidden sm:inline">Credits</span>
+                  <Coins size={16} />
+
+                  {user?.credits ?? 0}
+
+                  <span className="hidden xl:block">
+                    Credits
+                  </span>
                 </Link>
 
                 <button
                   onClick={logoutUser}
-                  className="
-    flex items-center gap-2
-    px-5 py-1.5
-    rounded-xl 
-    border border-[#2a3348]
-     cursor-pointer
-    text-gray-200
-    shadow-sm
-    transition-all duration-200
-    hover:bg-[#0d111c]
-    hover:border-red-500/40
-    hover:text-red-400
-    active:scale-[0.98]
-  "
+                  className="px-4 py-2 rounded-xl border border-white/10 hover:border-red-500"
                 >
                   Logout
                 </button>
               </>
             )}
           </div>
-        )}
+
+          {/* Mobile Toggle */}
+          <button
+            onClick={() =>
+              setMobileOpen(!mobileOpen)
+            }
+            className="md:hidden text-white"
+          >
+            {mobileOpen ? (
+              <X size={22} />
+            ) : (
+              <Menu size={22} />
+            )}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Drawer */}
+
+      <div
+        className={`fixed top-0 right-0 h-screen w-[85%] max-w-[320px]
+ bg-[#080c16]
+        z-[60]
+        transition-transform duration-300
+        ${
+          mobileOpen
+            ? "translate-x-0"
+            : "translate-x-full"
+        }`}
+      >
+        <div className="p-6">
+
+          <div className="flex justify-between">
+              <Link
+                  to="/pricing"
+                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-gray-900 border border-emerald-500/20"
+                >
+                  <Coins size={16} />
+
+                  {user?.credits ?? 0}
+
+                  <span className="">
+                    Credits
+                  </span>
+                </Link>
+            <button
+              onClick={() =>
+                setMobileOpen(false)
+              }
+            >
+              <X />
+            </button>
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3">
+
+            {user &&
+              links.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`p-3 rounded-xl ${
+                    isActive(item.path)
+                      ? "text-white font-semibold"
+                      : "text-gray-400"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+
+            {!user ? (
+              <>
+                <button
+                  onClick={() =>
+                    navigate("/login")
+                  }
+                  className="w-full p-3 border rounded-xl"
+                >
+                  Login
+                </button>
+
+                <button
+                  onClick={() =>
+                    navigate("/register")
+                  }
+                  className="w-full p-3 rounded-xl bg-indigo-600"
+                >
+                  Get Started
+                </button>
+              </>
+            ) : (
+              <>
+              
+                <button
+                  onClick={logoutUser}
+                  className="p-3 rounded-xl border border-red-500"
+                >
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
+        </div>
       </div>
-    </nav>
+
+      {mobileOpen && (
+        <div
+          onClick={() =>
+            setMobileOpen(false)
+          }
+          className="fixed inset-0 bg-black/40 z-40"
+        />
+      )}
+    </>
   );
 }
+

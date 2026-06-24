@@ -4,7 +4,6 @@ const { askAi } = require("../services/openRouter.service");
 const mockInterviewModel = require("../models/mock_interview.model");
 const userModel = require("../models/user.model");
 
-
 async function analyzeResumeController(req, res) {
   try {
     if (!req.file) {
@@ -59,17 +58,15 @@ Return output in STRICT JSON format.
 
     fs.unlinkSync(filePath);
 
-    res.status(200).json({ 
-        message: "Resume analyzed successfully.",
-        role: parsedData.role,
-        experience: parsedData.experience,
-        projects: parsedData.projects,
-        skills: parsedData.skills,
-        resumeText
-     });
-
+    res.status(200).json({
+      message: "Resume analyzed successfully.",
+      role: parsedData.role,
+      experience: parsedData.experience,
+      projects: parsedData.projects,
+      skills: parsedData.skills,
+      resumeText,
+    });
   } catch (err) {
-    
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
@@ -78,31 +75,39 @@ Return output in STRICT JSON format.
   }
 }
 
-async function generateQuestionsController(req, res){
+async function generateQuestionsController(req, res) {
   try {
-
-    let {role, experience, mode, resumeText, projects, skills } = req.body;
+    let { role, experience, mode, resumeText, projects, skills } = req.body;
 
     role = role?.trim();
     experience = experience?.trim();
     mode = mode?.trim();
 
-    if(!role || !experience || !mode){
-      return res.status(400).json({error: "Role, experience and mode are required."});
+    if (!role || !experience || !mode) {
+      return res
+        .status(400)
+        .json({ error: "Role, experience and mode are required." });
     }
 
     const user = await userModel.findById(req.user.id);
 
-    if(!user){
-      return res.status(404).json({error: "User not found."});
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
     }
 
-    if(user.credits < 50){
-      return res.status(400).json({error: "Insufficient credits. You need at least 50 credits for a mock interview."});
+    if (user.credits < 50) {
+      return res
+        .status(400)
+        .json({
+          error:
+            "Oops insufficient credits. You need 50 credits to continue",
+        });
     }
 
-    const projectText = Array.isArray(projects) && projects.length ? projects.join(", ") : "None";
-    const skillsText = Array.isArray(skills) && skills.length ? skills.join(", ") : "None";
+    const projectText =
+      Array.isArray(projects) && projects.length ? projects.join(", ") : "None";
+    const skillsText =
+      Array.isArray(skills) && skills.length ? skills.join(", ") : "None";
     const safeResume = resumeText?.trim() || "None";
 
     const userPrompt = `
@@ -113,17 +118,17 @@ async function generateQuestionsController(req, res){
     Projects: ${projectText}
     Skills: ${skillsText}
     `;
-    
-    if(!userPrompt.trim()){
+
+    if (!userPrompt.trim()) {
       return res.status(400).json({
-        message: "Prompt content is empty."
-      })
+        message: "Prompt content is empty.",
+      });
     }
 
     const messages = [
       {
         role: "system",
-        content : `
+        content: `
 You are an experienced human interviewer conducting a real professional interview.
 
 Talk naturally in simple English as if speaking directly to the candidate.
@@ -171,28 +176,32 @@ Output Rules:
 - Do NOT include difficulty labels.
 - Do NOT include explanations, notes, headings, markdown, or extra text.
 - Return only raw questions.
- `
+ `,
       },
       {
         role: "user",
-        content: userPrompt
-      }
+        content: userPrompt,
+      },
     ];
 
     const aiResponse = await askAi(messages);
 
-    if(!aiResponse){
-      return res.status(500).json({error: "AI failed to generate questions."});
+    if (!aiResponse) {
+      return res
+        .status(500)
+        .json({ error: "AI failed to generate questions." });
     }
 
     const questionsArray = aiResponse
-    .split("\n")
-    .map(q => q.trim())
-    .filter(q => q.length > 0)
-    .slice(0, 15);
+      .split("\n")
+      .map((q) => q.trim())
+      .filter((q) => q.length > 0)
+      .slice(0, 15);
 
-    if(questionsArray.length === 0){
-      return res.status(500).json({error: "AI failed to generate questions."});
+    if (questionsArray.length === 0) {
+      return res
+        .status(500)
+        .json({ error: "AI failed to generate questions." });
     }
 
     user.credits -= 50;
@@ -204,69 +213,89 @@ Output Rules:
       experience,
       mode,
       resumeText: safeResume,
-      questions: questionsArray.map((q, index)=> ({
+      questions: questionsArray.map((q, index) => ({
         question: q,
         // difficulty: ["Easy", "Medium", "Hard"][Math.floor(index / (questionsArray.length / 3))],
         // timeLimit: [60, 90, 120][Math.floor(index / (questionsArray.length / 3))]
-           difficulty: ["Easy","Easy","Easy","Easy","Easy","Medium","Medium","Medium","Medium","Medium","Medium","Hard","Hard","Hard","Hard"][index],
-        timeLimit: [60, 60, 60, 60, 60, 90, 90, 90, 90, 90, 90, 120, 120, 120, 120][index]
-      }))
-     });
+        difficulty: [
+          "Easy",
+          "Easy",
+          "Easy",
+          "Easy",
+          "Easy",
+          "Medium",
+          "Medium",
+          "Medium",
+          "Medium",
+          "Medium",
+          "Medium",
+          "Hard",
+          "Hard",
+          "Hard",
+          "Hard",
+        ][index],
+        timeLimit: [
+          60, 60, 60, 60, 60, 90, 90, 90, 90, 90, 90, 120, 120, 120, 120,
+        ][index],
+      })),
+    });
 
-     res.status(200).json({
+    res.status(200).json({
       message: "Mock interview questions generated successfully.",
       mockInterviewId: mockInterview._id,
       creditsLeft: user.credits,
       fullName: user.fullName,
       questions: mockInterview.questions,
-     })
-  } catch (err){
+    });
+  } catch (err) {
     console.error("Error in generateQuestionsController:", err);
     return res.status(500).json({
-      error: "Failed to generate mock interview questions."
-    })
+      error: "Failed to generate mock interview questions.",
+    });
   }
 }
 
-async function submitAnswerController(req, res){
-  try{
-      const {mockInterviewId, questionIndex, answer, timeTaken } = req.body;
+async function submitAnswerController(req, res) {
+  try {
+    const { mockInterviewId, questionIndex, answer, timeTaken } = req.body;
 
-      const mockInterview = await mockInterviewModel.findById(mockInterviewId)
-      
-      if(!mockInterview){
-        return res.status(404).json({error: "Mock interview session not found."});
-      }
+    const mockInterview = await mockInterviewModel.findById(mockInterviewId);
 
-      const question = mockInterview.questions[questionIndex]
+    if (!mockInterview) {
+      return res
+        .status(404)
+        .json({ error: "Mock interview session not found." });
+    }
 
-      // if no answer
+    const question = mockInterview.questions[questionIndex];
 
-      if(!answer){
-        question.score = 0;
-        question.feedback = "You did not submit an answer for this question.";
-        question.answer = "";
+    // if no answer
 
-        await mockInterview.save();
+    if (!answer) {
+      question.score = 0;
+      question.feedback = "You did not submit an answer for this question.";
+      question.answer = "";
 
-        return res.json({
-          feedback: question.feedback
-        })
-      }
+      await mockInterview.save();
 
-      if(timeTaken > question.timeLimit){
-        question.score = 0;
-        question.feedback = `You exceeded the time limit of ${question.timeLimit} seconds.`;
-        question.answer = answer;
+      return res.json({
+        feedback: question.feedback,
+      });
+    }
 
-        await mockInterview.save();
+    if (timeTaken > question.timeLimit) {
+      question.score = 0;
+      question.feedback = `You exceeded the time limit of ${question.timeLimit} seconds.`;
+      question.answer = answer;
 
-        return res.json({
-          feedback: question.feedback
-        })
-      }
+      await mockInterview.save();
 
-     const messages = [
+      return res.json({
+        feedback: question.feedback,
+      });
+    }
+
+    const messages = [
       {
         role: "system",
         content: `
@@ -308,157 +337,177 @@ Return ONLY valid JSON in this format:
   "finalScore": number,
   "feedback": "short human feedback"
 }
-`
-      }
-      ,
+`,
+      },
       {
         role: "user",
         content: `
 Question: ${question.question}
 Answer: ${answer}
-`
-      }
+`,
+      },
     ];
 
-    const aiResponse = await askAi(messages)
+    const aiResponse = await askAi(messages);
 
-    const parsed = JSON.parse(aiResponse)
+    const parsed = JSON.parse(aiResponse);
 
     question.answer = answer;
     question.confidence = parsed.confidence;
     question.communication = parsed.communication;
     question.correctness = parsed.correctness;
-    question.score = parsed.score;
+    question.score = Number(parsed.finalScore || 0);
     question.feedback = parsed.feedback;
 
-    await mockInterview.save()
+    await mockInterview.save();
 
     return res.status(200).json({
-      feedback: parsed.feedback
-    })
+      feedback: parsed.feedback,
+      score: question.score,
+      confidence: question.confidence,
+      communication: question.communication,
+      correctness: question.correctness,
+    });
   } catch (err) {
     return res.status(500).json({
-      error: "Failed to submit answer and get feedback."
-    })
+      error: "Failed to submit answer and get feedback.",
+    });
   }
 }
 
-async function getMockInterviewResultController(req, res){
-  try{
-     const { mockInterviewId } = req.body;
-      const mockInterview = await mockInterviewModel.findById(mockInterviewId);
-      if(!mockInterview){
-        return res.status(404).json({error: "Mock interview session not found."});
-      }
+async function getMockInterviewResultController(req, res) {
+  try {
+    const { mockInterviewId } = req.body;
+    const mockInterview = await mockInterviewModel.findById(mockInterviewId);
+    if (!mockInterview) {
+      return res
+        .status(404)
+        .json({ error: "Mock interview session not found." });
+    }
 
-      const totalQuestions = mockInterview.questions.length;
+    const totalQuestions = mockInterview.questions.length;
 
-      let totalScore = 0;
-      let totalConfidence = 0;
-      let totalCommunication = 0;
-      let totalCorrectness = 0;
+    let totalScore = 0;
+    let totalConfidence = 0;
+    let totalCommunication = 0;
+    let totalCorrectness = 0;
 
-      mockInterview.questions.forEach(q => {
-        totalScore += q.score || 0;
-        totalConfidence += q.confidence || 0;
-        totalCommunication += q.communication || 0;
-        totalCorrectness += q.correctness || 0;
-      });
+    mockInterview.questions.forEach((q) => {
+      totalScore += q.score || 0;
+      totalConfidence += q.confidence || 0;
+      totalCommunication += q.communication || 0;
+      totalCorrectness += q.correctness || 0;
+    });
 
-      const finalScore = totalQuestions  ? totalScore / totalQuestions : 0;
-      const avgConfidence = totalQuestions ? totalConfidence / totalQuestions : 0;
-      const avgCommunication = totalQuestions ? totalCommunication / totalQuestions : 0;
-      const avgCorrectness = totalQuestions ? totalCorrectness / totalQuestions : 0;
+    const finalScore = totalQuestions ? totalScore / totalQuestions : 0;
+    const avgConfidence = totalQuestions ? totalConfidence / totalQuestions : 0;
+    const avgCommunication = totalQuestions
+      ? totalCommunication / totalQuestions
+      : 0;
+    const avgCorrectness = totalQuestions
+      ? totalCorrectness / totalQuestions
+      : 0;
 
-      mockInterview.finalScore = finalScore;
-      mockInterview.status = "Completed";
+    mockInterview.finalScore = finalScore;
+    mockInterview.status = "Completed";
 
-      await mockInterview.save();
+    await mockInterview.save();
 
-
-      return res.status(200).json({
-        finalScore: Number(finalScore.toFixed(1)),
-        avgConfidence: Number(avgConfidence.toFixed(1)),
-        avgCommunication: Number(avgCommunication.toFixed(1)),
-        avgCorrectness: Number(avgCorrectness.toFixed(1)),
-        questionsWiseScore: mockInterview.questions.map(q => ({
-          question: q.question,
-          answer: q.answer || "",
-          score: q.score || 0,
-          feedback: q.feedback || 0,
-          confidence: q.confidence || 0,
-          communication: q.communication || 0,
-          correctness: q.correctness || 0,
-        }))
-      })
-  } catch (err){
+    return res.status(200).json({
+      finalScore: Number(finalScore.toFixed(1)),
+      avgConfidence: Number(avgConfidence.toFixed(1)),
+      avgCommunication: Number(avgCommunication.toFixed(1)),
+      avgCorrectness: Number(avgCorrectness.toFixed(1)),
+      questionsWiseScore: mockInterview.questions.map((q) => ({
+        question: q.question,
+        answer: q.answer || "",
+        score: q.score || 0,
+        feedback: q.feedback || 0,
+        confidence: q.confidence || 0,
+        communication: q.communication || 0,
+        correctness: q.correctness || 0,
+      })),
+    });
+  } catch (err) {
     return res.status(500).json({
-      error: "Failed to get mock interview result."
-    })
+      error: "Failed to get mock interview result.",
+    });
   }
 }
 
-
-async function getAllMockInterviewsController(req, res){
+async function getAllMockInterviewsController(req, res) {
   try {
     const userId = req.user.id;
-    const mockInterviews = await mockInterviewModel.find({userId})
-    .sort({createdAt: -1})
-    .select("_id role experience mode finalScore status createdAt");
-    
-    return res.status(200).json(mockInterviews)
-  } catch (err){
+    const mockInterviews = await mockInterviewModel
+      .find({ userId })
+      .sort({ createdAt: -1 })
+      .select("_id role experience mode finalScore status createdAt");
+
+    return res.status(200).json(mockInterviews);
+  } catch (err) {
     return res.status(500).json({
-      error: "Failed to get mock interview sessions."
-    })
+      error: "Failed to get mock interview sessions.",
+    });
   }
 }
 
+async function getMockInterviewController(req, res) {
+  try {
+    const { id } = req.params;
+    const mockInterview = await mockInterviewModel.findById(id);
 
-async function getMockInterviewController(req, res){
-try {
-  const { id } = req.params;
-  const mockInterview = await mockInterviewModel.findById(id);
+    if (!mockInterview) {
+      return res
+        .status(404)
+        .json({ error: "Mock interview session not found." });
+    }
+    const totalQuestions = mockInterview.questions.length;
 
-  if(!mockInterview){
-    return res.status(404).json({error: "Mock interview session not found."});
+    let totalConfidence = 0;
+    let totalCommunication = 0;
+    let totalCorrectness = 0;
+
+    mockInterview.questions.forEach((q) => {
+      totalConfidence += q.confidence || 0;
+      totalCommunication += q.communication || 0;
+      totalCorrectness += q.correctness || 0;
+    });
+
+    const avgConfidence = totalQuestions ? totalConfidence / totalQuestions : 0;
+    const avgCommunication = totalQuestions
+      ? totalCommunication / totalQuestions
+      : 0;
+    const avgCorrectness = totalQuestions
+      ? totalCorrectness / totalQuestions
+      : 0;
+
+    return res.status(200).json({
+      finalScore: mockInterview.finalScore || 0,
+      confidence: Number(avgConfidence.toFixed(1)),
+      communication: Number(avgCommunication.toFixed(1)),
+      correctness: Number(avgCorrectness.toFixed(1)),
+      questionWiseScore: mockInterview.questions.map((q) => ({
+        question: q.question,
+        answer: q.answer || "",
+        score: q.score || 0,
+        confidence: q.confidence || 0,
+        communication: q.communication || 0,
+        correctness: q.correctness || 0,
+        feedback: q.feedback || "",
+      })),
+    });
+  } catch (err) {
+    return res.status(500).json({
+      error: "Failed to get mock interview session.",
+    });
   }
-      const totalQuestions = mockInterview.questions.length;
-
-      let totalConfidence = 0;
-      let totalCommunication = 0;
-      let totalCorrectness = 0;
-
-      mockInterview.questions.forEach(q => {
-        totalConfidence += q.confidence || 0;
-        totalCommunication += q.communication || 0;
-        totalCorrectness += q.correctness || 0;
-      });
-
-      const avgConfidence = totalQuestions ? totalConfidence / totalQuestions : 0;
-      const avgCommunication = totalQuestions ? totalCommunication / totalQuestions : 0;
-      const avgCorrectness = totalQuestions ? totalCorrectness / totalQuestions : 0;
-
-return res.status(200).json({
-   finalScore: mockInterview.finalScore || 0,
-   confidence: Number(avgConfidence.toFixed(1)),
-   communication: Number(avgCommunication.toFixed(1)),
-   correctness: Number(avgCorrectness.toFixed(1)),
-   questionWiseScore: mockInterview.questions
-})
-  
-} catch (err){
-  return res.status(500).json({
-    error: "Failed to get mock interview session."
-  })
-}
 }
 
-module.exports = { 
-    analyzeResumeController,
-    generateQuestionsController,
-    submitAnswerController,
-    getMockInterviewResultController,
-    getAllMockInterviewsController,
-    getMockInterviewController
-}
+module.exports = {
+  analyzeResumeController,
+  generateQuestionsController,
+  submitAnswerController,
+  getMockInterviewResultController,
+  getAllMockInterviewsController,
+  getMockInterviewController,
+};

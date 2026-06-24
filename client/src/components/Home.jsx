@@ -1,18 +1,26 @@
+import React from "react";
 import Hero from "./Hero";
-import ResumeAnalysis from "./ResumeAnalysis";
-import HowItWorks from "./HowItWorks";
 import Features from "./Features";
+import PlatformOverview from "./PlatformOverview";
+import HowItWorks from "./HowItWorks";
+import MockInterviewShowcase from "./MockInterviewShowcase";
+import ReportsSection from "./ReportsSection";
+import WhyChooseUs from "./WhyChooseUs";
 import CTA from "./CTA";
 
-export default function Home() {
+const Home = () => {
+  return (
+    <div className="bg-[#0a0a12] scroll-smooth">
+      <Hero />
+      <PlatformOverview />
+      <MockInterviewShowcase />
+      <HowItWorks />
+      <Features />
+      <ReportsSection />
+      <WhyChooseUs />
+      <CTA />
+    </div>
+  );
+};
 
-    return (
-      <div >
-        <Hero />
-        <HowItWorks />
-        <Features />
-        <ResumeAnalysis />
-        <CTA />
-      </div>
-    );
-}
+export default Home;

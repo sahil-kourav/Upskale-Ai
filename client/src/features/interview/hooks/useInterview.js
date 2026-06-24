@@ -1,3 +1,4 @@
+import { useAuth } from "../../auth/hooks/useAuth";
 import {
   getAllInterviewReports,
   generateInterviewReport,
@@ -9,6 +10,7 @@ import { InterviewContext } from "../interview.context.jsx";
 import { useParams } from "react-router";
 
 export const useInterview = () => {
+  const { user, setUser } = useAuth();
   const context = useContext(InterviewContext);
   const { interviewId } = useParams();
 
@@ -19,28 +21,72 @@ export const useInterview = () => {
   const { loading, setLoading, report, setReport, reports, setReports } =
     context;
 
-  const generateReport = async ({
-    resumeFile,
-    selfDescription,
-    jobDescription,
-  }) => {
-    setLoading(true);
-    let data = null;
-    try {
-      data = await generateInterviewReport({
-        resumeFile,
-        selfDescription,
-        jobDescription,
-      });
-      setReport(data.interviewReport);
-    } catch (error) {
-      console.log("Error generating interview report:", error);
-    } finally {
-      setLoading(false);
+  // const generateReport = async ({
+  //   resumeFile,
+  //   selfDescription,
+  //   jobDescription,
+  // }) => {
+  //   setLoading(true);
+  //   let data = null;
+  //   try {
+  //     data = await generateInterviewReport({
+  //       resumeFile,
+  //       selfDescription,
+  //       jobDescription,
+  //     });
+  //     setReport(data.interviewReport);
+  //   } catch (error) {
+  //     console.log("Error generating interview report:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+
+  //   return data.interviewReport;
+  // };
+
+
+const generateReport = async ({
+  resumeFile,
+  selfDescription,
+  jobDescription,
+}) => {
+  setLoading(true);
+
+  let data = null;
+
+  try {
+    data = await generateInterviewReport({
+      resumeFile,
+      selfDescription,
+      jobDescription,
+    });
+
+    setReport(data.interviewReport);
+
+    // update navbar credits instantly
+    if (data?.creditsLeft !== undefined) {
+      setUser((prev) => ({
+        ...prev,
+        credits: data.creditsLeft,
+      }));
     }
 
-    return data.interviewReport;
-  };
+  } catch (error) {
+    console.log(
+      error?.response?.data?.error ||
+      "Error generating interview report"
+    );
+
+    throw error;
+  } finally {
+    setLoading(false);
+  }
+
+  return data.interviewReport;
+};
+
+
+
 
   const getReportById = async (interviewId) => {
     setLoading(true);

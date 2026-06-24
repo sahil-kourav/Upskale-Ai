@@ -51,8 +51,8 @@ async function registerUser(req, res) {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure:false,
-    sameSite:"lax",
+    secure:true,
+    sameSite:"none",
     maxAge: 6 * 24 * 60 * 60 * 1000, // 6 days
   });
 
@@ -63,6 +63,7 @@ async function registerUser(req, res) {
       phone: user.phone,
       fullName: user.fullName,
       email: user.email,
+      credits:user.credits
     },
   });
 }
@@ -108,8 +109,8 @@ async function loginUser(req, res) {
 
   res.cookie("token", token, {
     httpOnly: true,
-     secure:false,
-     sameSite:"lax",
+     secure:true,
+     sameSite:"none",
     maxAge: 6 * 24 * 60 * 60 * 1000, // 6 days
   });
 
@@ -120,6 +121,7 @@ async function loginUser(req, res) {
       phone: user.phone,
       fullName: user.fullName,
       email: user.email,
+      credits:user.credits
     },
   });
 }
@@ -162,6 +164,7 @@ async function getUser(req, res) {
       phone: user.phone,
       fullName: user.fullName,
       email: user.email,
+      credits: user.credits,
     },
   });
 }

@@ -47,7 +47,6 @@ const NAV_ITEMS = [
     id: "behavioral",
     label: "Behavioral Questions",
     icon: (
-      // People / soft skills
       <svg
         width="16"
         height="16"
@@ -69,7 +68,6 @@ const NAV_ITEMS = [
     id: "plan",
     label: "Preparation Plan",
     icon: (
-      // Calendar / checklist
       <svg
         width="16"
         height="16"
@@ -92,7 +90,6 @@ const NAV_ITEMS = [
     id: "feedback",
     label: "AI Feedback",
     icon: (
-      // Sparkle / AI
       <svg
         width="16"
         height="16"
@@ -118,7 +115,7 @@ function QuestionCard({ item, index }) {
     <div className="bg-gray-800 p-1 border border-gray-700 rounded-xl mb-0 overflow-hidden shadow-sm">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full text-left px-5 py-4 flex items-start gap-3 cursor-pointer bg-gray-800 hover:bg-[#262b38] transition-colors"
+        className="w-full text-left px-3 sm:px-5 py-3 sm:py-4 flex items-start gap-2.5 sm:gap-3 cursor-pointer bg-gray-800 hover:bg-[#262b38] transition-colors"
       >
         <span className="mt-0.5 w-6 h-6 rounded-full bg-indigo-50 text-indigo-600 text-xs font-semibold flex items-center justify-center flex-shrink-0">
           {index + 1}
@@ -133,7 +130,7 @@ function QuestionCard({ item, index }) {
         </span>
       </button>
       {open && (
-        <div className="px-5 pb-4 space-y-3 border-t border-slate-50">
+        <div className="px-3 sm:px-5 pb-4 space-y-3 border-t border-slate-50">
           <div className="flex gap-2 pt-3">
             <span className="text-indigo-400 text-sm flex-shrink-0">💡</span>
             <p className="text-xs text-gray-300 leading-relaxed">
@@ -144,7 +141,7 @@ function QuestionCard({ item, index }) {
             <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">
               Suggested answer
             </p>
-            <div className="text-sm text-gray-300 leading-relaxed bg-indigo-950/30 border-l-2 border-indigo-500 rounded-r-lg px-4 py-3">
+            <div className="text-sm text-gray-300 leading-relaxed bg-indigo-950/30 border-l-2 border-indigo-500 rounded-r-lg px-3 sm:px-4 py-3">
               {item.answer}
             </div>
           </div>
@@ -189,11 +186,11 @@ function PeriodBadge({ period }) {
 
 function HeaderCard({ candidate, matchScore }) {
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6">
-      <div className="flex items-center gap-5">
+    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4 sm:p-6">
+      <div className="flex items-center gap-3 sm:gap-5">
         {/* Avatar with online dot */}
         <div className="relative flex-shrink-0">
-          <div className="w-[72px] h-[72px] rounded-[18px] overflow-hidden border-2 border-indigo-700">
+          <div className="w-14 h-14 sm:w-[72px] sm:h-[72px] rounded-2xl sm:rounded-[18px] overflow-hidden border-2 border-indigo-700">
             <img
               src="https://thumbs.dreamstime.com/b/student-avatar-illustration-user-profile-icon-youth-avatar-student-avatar-illustration-simple-cartoon-user-portrait-user-profile-276214145.jpg"
               alt={`${candidate.name ?? "Candidate"} avatar`}
@@ -208,7 +205,7 @@ function HeaderCard({ candidate, matchScore }) {
           <p className="text-[11px] font-medium uppercase tracking-wider text-gray-500 mb-1">
             Welcome back
           </p>
-          <h2 className="text-[22px] font-semibold text-white leading-tight mb-2">
+          <h2 className="text-lg sm:text-[22px] font-semibold text-white leading-tight mb-2 truncate">
             {candidate.name || "Not available"}
           </h2>
           <div className="flex items-center gap-2.5 flex-wrap">
@@ -236,7 +233,7 @@ function HeaderCard({ candidate, matchScore }) {
 
 function SummaryCard({ summary }) {
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
+    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4 sm:p-5">
       <SectionLabel icon="≡">Summary</SectionLabel>
       <p className="text-sm text-gray-300 leading-7">
         {summary || "No summary available"}
@@ -247,7 +244,7 @@ function SummaryCard({ summary }) {
 
 function SkillsCard({ skills }) {
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
+    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4 sm:p-5">
       <SectionLabel icon="⟨⟩">Technical skills</SectionLabel>
       {skills?.length ? (
         <div className="flex flex-wrap gap-2">
@@ -266,10 +263,10 @@ function ExperienceCard({ experience }) {
   if (!experience?.length) return null;
 
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
+    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4 sm:p-5">
       <SectionLabel icon="🏢">Experience</SectionLabel>
 
-      <div className="flex gap-4">
+      <div className="flex gap-3 sm:gap-4">
         {/* Timeline dots */}
         <div className="flex flex-col items-center pt-1 flex-shrink-0">
           {experience.map((_, i) => (
@@ -293,7 +290,7 @@ function ExperienceCard({ experience }) {
                 i < experience.length - 1 ? "pb-4 border-b border-gray-700" : ""
               }
             >
-              <div className="flex items-start justify-between gap-3 flex-wrap">
+              <div className="flex items-start justify-between gap-2 sm:gap-3 flex-wrap">
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-white leading-snug">
                     {exp.title}
@@ -321,13 +318,13 @@ function ProjectsCard({ projects }) {
   if (!projects?.length) return null;
 
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
+    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4 sm:p-5">
       <SectionLabel icon="▦">Projects</SectionLabel>
       <div className="space-y-3">
         {projects.map((proj, i) => (
           <div
             key={i}
-            className="rounded-xl bg-gray-900 border border-gray-700 p-4"
+            className="rounded-xl bg-gray-900 border border-gray-700 p-3.5 sm:p-4"
           >
             <div className="flex items-start justify-between gap-2 mb-1.5">
               <p className="text-sm font-medium text-white">{proj.name}</p>
@@ -356,7 +353,7 @@ function EducationCard({ education }) {
   if (!education?.length) return null;
 
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
+    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4 sm:p-5">
       <SectionLabel icon="🎓">Education</SectionLabel>
       <div className="space-y-4">
         {education.map((e, i) => (
@@ -382,7 +379,7 @@ function CertificationsCard({ certifications }) {
   if (!certifications?.length) return null;
 
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
+    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4 sm:p-5">
       <SectionLabel className="flex items-center mb-1.5">
         <span className="mr-1">
           <svg
@@ -464,7 +461,7 @@ function SectionEyebrow({ icon, children }) {
 
 function ProjectItem({ item, index }) {
   return (
-    <div className="flex gap-3 items-start bg-gray-900/80 border border-gray-700/60 rounded-xl p-3.5">
+    <div className="flex gap-3 items-start bg-gray-900/80 border border-gray-700/60 rounded-xl p-3 sm:p-3.5">
       <div className="w-6 h-6 rounded-lg bg-gray-700 border border-gray-600 text-gray-300 text-[11px] font-semibold flex items-center justify-center flex-shrink-0 mt-0.5">
         {index + 1}
       </div>
@@ -475,7 +472,7 @@ function ProjectItem({ item, index }) {
 
 function ResumeItem({ item, index }) {
   return (
-    <div className="flex gap-3 items-start bg-gray-900/80 border border-gray-700/60 rounded-xl p-3.5">
+    <div className="flex gap-3 items-start bg-gray-900/80 border border-gray-700/60 rounded-xl p-3 sm:p-3.5">
       <div className="w-6 h-6 rounded-lg bg-gray-700 border border-gray-600 text-gray-300 text-[11px] font-semibold flex items-center justify-center flex-shrink-0 mt-0.5">
         {index + 1}
       </div>
@@ -492,7 +489,7 @@ const PreparationDay = ({ day }) => (
     before:w-[14px] before:h-[14px] before:rounded-full
     before:bg-[#161b22] before:border-2 before:border-[#ff2d78]"
   >
-    <div className="flex items-center gap-[0.6rem]">
+    <div className="flex items-center gap-[0.6rem] flex-wrap">
       <span className="text-[0.7rem] font-bold text-[#ff2d78] bg-[rgba(255,45,120,0.1)] border border-[rgba(255,45,120,0.25)] px-2 py-[0.1rem] rounded-full">
         Day {day.day}
       </span>
@@ -520,9 +517,9 @@ function SectionFeedback({ report }) {
 
   return (
     <div className="space-y-3">
-      <div className="bg-gray-800 border border-indigo-800/60 rounded-2xl p-5">
-        <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-xl bg-indigo-950 border border-indigo-700/60 flex items-center justify-center flex-shrink-0">
+      <div className="bg-gray-800 border border-indigo-800/60 rounded-2xl p-4 sm:p-5">
+        <div className="flex items-center gap-3 sm:gap-3.5">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-indigo-950 border border-indigo-700/60 flex items-center justify-center flex-shrink-0">
             <svg
               className="w-5 h-5 text-indigo-300"
               viewBox="0 0 24 24"
@@ -550,7 +547,7 @@ function SectionFeedback({ report }) {
       </div>
 
       {/* Project Improvements */}
-      <div className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
+      <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4 sm:p-5">
         <SectionEyebrow icon="🚀">Project improvements</SectionEyebrow>
         {feedback.projectImprovements?.length ? (
           <div className="space-y-2">
@@ -566,7 +563,7 @@ function SectionFeedback({ report }) {
       </div>
 
       {/* Resume Improvements */}
-      <div className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
+      <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4 sm:p-5">
         <SectionEyebrow icon="📄">Resume improvements</SectionEyebrow>
         {feedback.resumeImprovements?.length ? (
           <div className="space-y-2">
@@ -581,8 +578,8 @@ function SectionFeedback({ report }) {
         )}
       </div>
       {/* Final Advice */}
-      <div className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
-        <div className="flex items-start gap-3.5">
+      <div className="bg-gray-800 border border-gray-700 rounded-2xl p-4 sm:p-5">
+        <div className="flex items-start gap-3 sm:gap-3.5">
           <div className="w-10 h-10 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center flex-shrink-0 mt-0.5">
             <svg
               className="w-5 h-5 text-gray-300"
@@ -658,20 +655,20 @@ const InterviewReport = () => {
 
   return (
     /* Page shell */
-    <div className="w-full min-h-screen p-4 bg-[#0d1117] text-[#e6edf3] font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] flex items-stretch box-border [&::-webkit-scrollbar]:hidden">
-      {/* 3-column card */}
-      <div className="flex w-full mx-auto bg-[#161b22] border border-[#2a3348] rounded-2xl justify-between">
-        {/* ── Left Nav ── */}
-        <nav className="w-[220px] flex-shrink-0 px-4 py-7 flex flex-col justify-between gap-1">
-          <div>
-            <p className="text-[0.9rem] font-semibold uppercase tracking-[0.05em] text-[#b6bfca] px-3 mb-3">
+    <div className="w-full min-h-screen p-0 sm:p-4 bg-[#0d1117] text-[#e6edf3] font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] flex items-stretch box-border [&::-webkit-scrollbar]:hidden">
+      {/* Responsive 3-column / stacked card */}
+      <div className="flex flex-col lg:flex-row w-full mx-auto bg-[#161b22] border border-[#2a3348] rounded-none sm:rounded-2xl lg:justify-between">
+        {/* ── Nav: top tab strip on mobile/tablet, left sidebar on desktop ── */}
+        <nav className="order-1 lg:order-none w-full lg:w-[220px] flex-shrink-0 border-b lg:border-b-0 border-[#2a3348] px-3 lg:px-4 py-2.5 lg:py-7 flex flex-row lg:flex-col lg:justify-between gap-1 overflow-x-auto lg:overflow-visible [&::-webkit-scrollbar]:hidden">
+          <div className="flex flex-row lg:flex-col items-center lg:items-stretch gap-1 w-full">
+            <p className="hidden lg:block text-[0.9rem] font-semibold uppercase tracking-[0.05em] text-[#b6bfca] px-3 mb-3 flex-shrink-0">
               Upskale AI
             </p>
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveNav(item.id)}
-                className={`flex items-center gap-[0.6rem] w-full px-3 py-[0.65rem] bg-transparent border-0 rounded-lg text-sm cursor-pointer text-left transition-colors duration-150
+                className={`flex items-center gap-2 flex-shrink-0 lg:w-full px-2.5 sm:px-3 py-2 lg:py-[0.65rem] bg-transparent border-0 rounded-lg text-sm cursor-pointer text-left whitespace-nowrap transition-colors duration-150
                   ${
                     activeNav === item.id
                       ? "bg-[rgba(255,45,120,0.1)] text-[#ffffff] [&_svg]:stroke-[#ffffff]"
@@ -681,23 +678,23 @@ const InterviewReport = () => {
                 <span className="flex items-center flex-shrink-0">
                   {item.icon}
                 </span>
-                {item.label}
+                <span className="hidden sm:inline">{item.label}</span>
               </button>
             ))}
           </div>
         </nav>
 
-        {/* Divider */}
-        <div className="w-px bg-[#2a3348] flex-shrink-0" />
+        {/* Divider (vertical on desktop only) */}
+        <div className="hidden lg:block w-px bg-[#2a3348] flex-shrink-0" />
 
         {/* ── Center Content ── */}
-        <main className="flex-1 px-8 py-7 overflow-y-auto max-h-[calc(100vh-3rem)] pb-20 [&::-webkit-scrollbar]:hidden">
+        <main className="order-3 lg:order-none flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-5 lg:py-7 lg:overflow-y-auto lg:max-h-[calc(100vh-3rem)] pb-10 lg:pb-20 [&::-webkit-scrollbar]:hidden">
           {activeNav === "overview" && <SectionOverview report={report} />}
 
           {/* Technical */}
           {activeNav === "technical" && (
             <section className="min-h-full">
-              <div className="flex items-baseline gap-3 mb-6 pb-4 border-b border-[#2a3348]">
+              <div className="flex items-baseline gap-3 flex-wrap mb-6 pb-4 border-b border-[#2a3348]">
                 <h2 className="m-0 text-[1.1rem] font-bold text-[#e6edf3]">
                   Technical Questions
                 </h2>
@@ -716,7 +713,7 @@ const InterviewReport = () => {
           {/* Behavioral */}
           {activeNav === "behavioral" && (
             <section className="min-h-full">
-              <div className="flex items-baseline gap-3 mb-6 pb-4 border-b border-[#2a3348]">
+              <div className="flex items-baseline gap-3 flex-wrap mb-6 pb-4 border-b border-[#2a3348]">
                 <h2 className="m-0 text-[1.1rem] font-bold text-[#e6edf3]">
                   Behavioral Questions
                 </h2>
@@ -735,7 +732,7 @@ const InterviewReport = () => {
           {/* Preparation Plan */}
           {activeNav === "plan" && (
             <section className="min-h-full">
-              <div className="flex items-baseline gap-3 mb-6 pb-4 border-b border-[#2a3348]">
+              <div className="flex items-baseline gap-3 flex-wrap mb-6 pb-4 border-b border-[#2a3348]">
                 <h2 className="m-0 text-[1.1rem] font-bold text-[#e6edf3]">
                   Preparation Plan
                 </h2>
@@ -761,18 +758,18 @@ const InterviewReport = () => {
           {activeNav === "feedback" && <SectionFeedback report={report} />}
         </main>
 
-        {/* Divider */}
-        <div className="w-px bg-[#2a3348] flex-shrink-0" />
+        {/* Divider (vertical on desktop only) */}
+        <div className="hidden lg:block w-px bg-[#2a3348] flex-shrink-0" />
 
-        {/* ── Right Sidebar ── */}
-        <aside className="w-[260px] flex-shrink-0 flex flex-col gap-0 bg-[#0d1117] border-l border-[#1e2535] px-4 py-5">
+        {/* ── Sidebar: score panel above content on mobile, right rail on desktop ── */}
+        <aside className="order-2 lg:order-none w-full lg:w-[260px] flex-shrink-0 flex flex-col gap-0 bg-[#0d1117] border-b lg:border-b-0 lg:border-l border-[#1e2535] px-4 sm:px-5 py-4 lg:py-5">
           {/* Match Score */}
           <p className="text-[12px] font-semibold uppercase tracking-[.1em] text-[#4b5675] mb-3">
             Match Score
           </p>
           <div className="flex flex-col items-center gap-2.5 pb-2">
             {/* Arc ring */}
-            <div className="relative w-[110px] h-[110px]">
+            <div className="relative w-[90px] h-[90px] sm:w-[110px] sm:h-[110px]">
               <svg viewBox="0 0 110 110" fill="none" className="w-full h-full">
                 <defs>
                   <linearGradient
@@ -807,7 +804,7 @@ const InterviewReport = () => {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-[26px] font-bold text-indigo-400 leading-none tracking-tight">
+                <span className="text-[22px] sm:text-[26px] font-bold text-indigo-400 leading-none tracking-tight">
                   {report.matchScore}%
                 </span>
                 <span className="text-[12px] text-[#2e3857] font-medium mt-0.5">

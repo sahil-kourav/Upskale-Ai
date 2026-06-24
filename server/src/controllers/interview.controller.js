@@ -1,52 +1,98 @@
 const pdfParse = require("pdf-parse");
 const { generateInterviewReport, generateResumePdf } = require("../services/ai.service");
 const interviewReportModel = require("../models/interviewReport.model");
-
+const userModel = require("../models/user.model")
 /**
  * @desc Generate an interview report based on the provided resume, self-description, and job description
  * @route POST /api/interview/
  * @access Private
  */
 
+
 async function generateInterviewReportController(req, res) {
   try {
-    const resumeContent = await new pdfParse.PDFParse(
-      Uint8Array.from(req.file.buffer),
-    ).getText();
+    if (!req.file) {
+      return res.status(400).json({
+        error: "Resume is required",
+      });
+    }
 
     const { selfDescription, jobDescription } = req.body;
 
-    if (!resumeContent || !selfDescription || !jobDescription) {
-      return res
-        .status(400)
-        .json({
-          error: "Resume, self-description, and job description are required",
-        });
+    if (!selfDescription || !jobDescription) {
+      return res.status(400).json({
+        error:
+          "Self description and job description are required",
+      });
     }
 
-    const interviewReportByAI = await generateInterviewReport({
-      resume: resumeContent.text,
-      selfDescription,
-      jobDescription,
-    });
+    const user = await userModel.findById(req.user.id);
 
-    const interviewReport = await interviewReportModel.create({
-      user: req.user.id,
-      resume: resumeContent.text,
-      selfDescription,
-      jobDescription,
-      ...interviewReportByAI,
-    });
+    if (!user) {
+      return res.status(404).json({
+        error: "User not found",
+      });
+    }
 
-    res.status(201).json({
-      message: "Interview report generated successfully",
+    if (user.credits < 50) {
+      return res.status(400).json({
+        error:
+          "Insufficient credits. You need at least 50 credits to generate a report.",
+      });
+    }
+
+
+    const resumeContent =
+      await new pdfParse.PDFParse(
+        Uint8Array.from(req.file.buffer)
+      ).getText();
+
+    if (!resumeContent?.text) {
+      return res.status(400).json({
+        error: "Unable to read resume",
+      });
+    }
+
+
+    const interviewReportByAI =
+      await generateInterviewReport({
+        resume: resumeContent.text,
+        selfDescription,
+        jobDescription,
+      });
+
+    user.credits -= 50;
+
+    await user.save();
+
+    const interviewReport =
+      await interviewReportModel.create({
+        user: req.user.id,
+        resume: resumeContent.text,
+        selfDescription,
+        jobDescription,
+        ...interviewReportByAI,
+      });
+
+    return res.status(201).json({
+      message:
+        "Interview report generated successfully",
+
+      creditsLeft: user.credits,
+
       interviewReport,
     });
+
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: "Failed to generate interview report" });
+    console.log(error);
+
+    return res.status(500).json({
+      error:
+        "Failed to generate interview report",
+    });
   }
 }
+
 
 /** 
  * @desc Get a specific interview report by its ID for the authenticated user

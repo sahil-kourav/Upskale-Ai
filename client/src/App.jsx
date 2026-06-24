@@ -4,10 +4,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./features/auth/auth.context.jsx";
 import { InterviewProvider } from "./features/interview/interview.context.jsx";
+import { MockInterviewProvider } from "./features/mock_Interview/mockInterview.context.jsx";
 const App = () => {
   return (
     <AuthProvider>
       <InterviewProvider>
+        <MockInterviewProvider>
         <RouterProvider router={router} />
          <ToastContainer
           position="top-right"
@@ -15,6 +17,7 @@ const App = () => {
           theme="dark"
           closeOnClick
         />
+        </MockInterviewProvider>
       </InterviewProvider>
     </AuthProvider>
   );
