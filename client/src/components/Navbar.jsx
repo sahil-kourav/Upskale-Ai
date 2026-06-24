@@ -147,7 +147,7 @@ export default function Navbar() {
               <>
                 <Link
                   to="/pricing"
-                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20"
+                  className="flex items-center gap-2 px-3 py-2 rounded-full  border border-white/10"
                 >
                   <Coins size={16} />
 
@@ -160,7 +160,7 @@ export default function Navbar() {
 
                 <button
                   onClick={logoutUser}
-                  className="px-4 py-2 rounded-xl border border-white/10 hover:border-red-500"
+                  className="px-4 py-2 rounded-xl border border-white/10 hover:border-red-500 text-white hover:text-red-500 transition cursor-pointer"
                 >
                   Logout
                 </button>

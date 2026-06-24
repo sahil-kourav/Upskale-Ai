@@ -31,9 +31,11 @@ const MockInterviewHistory = () => {
             </p>
           </div>
         ) : history.length === 0 ? (
-          <div className="bg-gray-900 border border-gray-800 rounded-md p-12 text-center">
-            <p className="text-gray-300 font-medium">No interviews yet</p>
-            <p className="text-sm text-gray-500 mt-1">
+          <div className=" text-center mt-40">
+            <p className="text-gray-400 text-xl font-medium">
+              No mock interviews found
+            </p>
+            <p className="text-sm text-gray-500 mt-3">
               Start your first mock interview to see it here.
             </p>
           </div>

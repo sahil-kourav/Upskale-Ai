@@ -42,15 +42,15 @@ export default function Dashboard() {
   // no reports yet
   if (reports.length === 0) {
     return (
-      <div className="min-h-screen bg-[#0a0e16] flex flex-col items-center justify-center px-6 text-center">
-        <h2 className="text-3xl font-semibold text-white">No reports yet</h2>
-        <p className="mt-3 text-gray-400">
+      <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
+        <h2 className="text-2xl font-semibold text-gray-400">No reports yet</h2>
+        <p className="mt-3 text-gray-500 text-sm">
           Generate your first interview report to start tracking your
           progress.
         </p>
         <button
           onClick={() => navigate("/create-report")}
-          className="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md"
+          className="mt-8 border-b cursor-pointer hover:border-blue-500 hover:text-blue-400 border-white text-gray-300 px-6 py-3 rounded-md"
         >
           Generate Report
         </button>

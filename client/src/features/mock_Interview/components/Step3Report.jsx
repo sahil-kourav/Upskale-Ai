@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from "recharts";
 import { useMockInterview } from "../hooks/useMockInterview";
+import Loading from "../../../components/Loading";
 
 // returns a short message based on the final score
 function getPerformanceText(score) {
@@ -34,11 +35,7 @@ const Step3Report = () => {
   const { report } = useMockInterview();
 
   if (!report) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0e16]">
-        <p className="text-gray-500 text-lg">Loading report...</p>
-      </div>
-    );
+    return <Loading />
   }
 
   const {
