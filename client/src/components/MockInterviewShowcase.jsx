@@ -6,109 +6,153 @@ import {
   FaHistory,
   FaCheckCircle,
   FaMicrophone,
+  FaWaveSquare,
 } from "react-icons/fa";
 
 const points = [
-  "Interview questions built for your profile",
-  "Voice interview practice",
-  "Detailed feedback after every answer",
-  "Track strengths and weak areas",
-  "Clear improvement roadmap"
+  "Questions personalized to resume and role",
+  "Voice-based interview experience",
+  "Instant answer evaluation",
+  "Track confidence and communication",
+  "Actionable improvement roadmap",
 ];
 
-const stats = [
-  { label: "Questions Generated", value: "12K+" },
-  { label: "Interview Score", value: "8.4/10" },
-  { label: "Completion Rate", value: "94%" },
+const insights = [
+  {
+    value: "82%",
+    label: "Confidence",
+  },
+
+  {
+    value: "8.6",
+    label: "Communication",
+  },
+
+  {
+    value: "91%",
+    label: "Readiness",
+  },
 ];
 
 const MockInterviewShowcase = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-[#0a0a12] py-16 sm:py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        {/* left */}
+    <section className="py-24 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center">
+        {/* LEFT */}
+
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          initial={{
+            opacity: 0,
+            x: -30,
+          }}
+          whileInView={{
+            opacity: 1,
+            x: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
         >
-          <h2 className="text-3xl sm:text-4xl text-[#e4e1ed] font-sans font-black tracking-[0.01em] leading-tight">
-            AI-Powered Mock Interviews 
+          <span className="uppercase tracking-[0.25em] text-indigo-400 text-xs">
+            Interview Simulation
+          </span>
+
+          <h2 className="mt-5 text-4xl lg:text-5xl font-bold text-white leading-tight">
+            Practice Interviews.
+            <br />
+            Improve Every Attempt.
           </h2>
-          <p className="mt-4 text-[#908fa0] text-sm sm:text-base leading-relaxed max-w-xl">
-            Experience a realistic interview environment with AI-driven questions
-            and instant feedback.
+
+          <p className="mt-6 text-zinc-400 text-lg leading-relaxed max-w-xl">
+            Experience AI-driven interviews with role-specific questions, answer
+            evaluation, and detailed feedback.
           </p>
-        
 
-          <ul className="mt-6 space-y-3">
-            {points.map((p, i) => (
-              <li key={i} className="flex items-center gap-3 text-sm sm:text-base text-[#a0a0b8]">
-                <FaCheckCircle className="text-indigo-400 shrink-0" size={15} />
-                {p}
-              </li>
+          <div className="mt-10 space-y-4">
+            {points.map((item) => (
+              <div key={item} className="flex gap-4 items-start">
+                <FaCheckCircle className="text-indigo-400 mt-1" />
+
+                <span className="text-zinc-300">{item}</span>
+              </div>
             ))}
-          </ul>
+          </div>
 
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-10 flex gap-4 flex-wrap">
             <button
               onClick={() => navigate("/mock-interview")}
-              className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-indigo-900/30 transition"
+              className="group bg-indigo-600 hover:bg-indigo-500 px-7 py-4 rounded-2xl text-white flex items-center gap-3"
             >
               Start Interview
-              <FaArrowRight size={13} />
+              <FaArrowRight className="group-hover:translate-x-1 transition" />
             </button>
 
             <button
               onClick={() => navigate("/mock-interview-history")}
-              className="inline-flex items-center gap-2 border border-white/10 hover:border-white/20 hover:bg-white/5 text-[#e4e1ed] font-medium px-6 py-3 rounded-xl transition"
+              className="px-7 py-4 rounded-2xl border border-white/10 text-white hover:bg-white/[0.03]"
             >
-              View History
-              <FaHistory size={13} />
+              View Sessions
             </button>
           </div>
         </motion.div>
 
-        {/* right — preview card */}
+        {/* RIGHT */}
+
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          initial={{
+            opacity: 0,
+            scale: 0.95,
+          }}
+          whileInView={{
+            opacity: 1,
+            scale: 1,
+          }}
+          viewport={{
+            once: true,
+          }}
         >
-          <div className="rounded-2xl bg-[#0f0f1c]/80 border border-white/5 p-5 sm:p-6 shadow-2xl shadow-indigo-900/20">
-            <div className="relative aspect-video rounded-xl bg-[#12121f] border border-white/5 flex items-center justify-center overflow-hidden">
-              <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/40 px-3 py-1 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                <span className="text-white text-xs font-medium">AI Interviewer</span>
+          <div className="rounded-[32px] bg-[#0d111b]/90 border border-white/[0.06] p-7">
+            <div className="flex justify-between">
+              <div>
+                <div className="text-white">Frontend Developer Interview</div>
+
+                <div className="text-zinc-500 text-sm">Question 03 / 10</div>
               </div>
 
-              <div className="w-16 h-16 rounded-full bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-300">
-                <FaMicrophone size={22} />
+              <div className="text-emerald-400 text-sm">● Live</div>
+            </div>
+
+            <div className="mt-8 rounded-3xl border border-white/5 bg-[#111827] p-8">
+              <div className="flex justify-center">
+                <div className="w-24 h-24 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
+                  <FaMicrophone className="text-indigo-300" size={26} />
+                </div>
               </div>
 
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
-                <p className="text-white text-xs text-center">
-                  "Tell me about a challenging project you led."
+              <div className="mt-8 text-center">
+                <p className="text-white">
+                  Explain a challenging backend problem you solved recently.
                 </p>
+
+                <div className="mt-6 flex justify-center">
+                  <FaWaveSquare className="text-indigo-400" size={26} />
+                </div>
               </div>
             </div>
 
-            <div className="mt-5 grid grid-cols-3 gap-3">
-              {stats.map((s, i) => (
+            <div className="mt-6 grid grid-cols-3 gap-4">
+              {insights.map((item) => (
                 <div
-                  key={i}
-                  className="text-center bg-[#12121f] border border-white/5 rounded-xl py-3"
+                  key={item.label}
+                  className="rounded-2xl bg-[#121826] p-4 text-center"
                 >
-                  <p className="text-base sm:text-lg font-bold text-[#c0c1ff]">
-                    {s.value}
-                  </p>
-                  <p className="text-[10px] sm:text-xs text-[#7070a0] mt-1 leading-tight">
-                    {s.label}
-                  </p>
+                  <div className="text-white font-bold text-xl">
+                    {item.value}
+                  </div>
+
+                  <div className="text-zinc-500 text-xs mt-2">{item.label}</div>
                 </div>
               ))}
             </div>

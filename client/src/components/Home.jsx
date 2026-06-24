@@ -4,7 +4,6 @@ import Features from "./Features";
 import PlatformOverview from "./PlatformOverview";
 import HowItWorks from "./HowItWorks";
 import MockInterviewShowcase from "./MockInterviewShowcase";
-import ReportsSection from "./ReportsSection";
 import WhyChooseUs from "./WhyChooseUs";
 import CTA from "./CTA";
 
@@ -16,7 +15,6 @@ const Home = () => {
       <MockInterviewShowcase />
       <HowItWorks />
       <Features />
-      <ReportsSection />
       <WhyChooseUs />
       <CTA />
     </div>

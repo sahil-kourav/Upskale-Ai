@@ -75,7 +75,6 @@ export default function Navbar() {
       ? location.pathname === "/"
       : location.pathname.startsWith(path);
 
-  if (loading) return null;
 
   return (
     <>

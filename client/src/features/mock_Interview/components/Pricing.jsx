@@ -123,7 +123,7 @@ const Pricing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#161b27] py-16 px-6">
+    <div className="min-h-screen py-16 px-6">
       <div className="max-w-6xl mx-auto mb-14 flex items-start gap-4">
         <div className="text-left sm:text-center w-full">
           <h1 className="text-4xl font-semibold text-gray-100">Choose Your Plan</h1>
@@ -147,7 +147,7 @@ const Pricing = () => {
               className={`relative rounded-3xl p-6 bg-[#1c2333] border-2 transition-all duration-300
                 ${
                   isSelected
-                    ? "border-emerald-500 shadow-2xl shadow-emerald-500/20 ring-4 ring-emerald-500/20 scale-105 z-10"
+                    ? "border-emerald-500 shadow-2xl shadow-emerald-300/10  scale-105 z-10"
                     : "border-[#2a3349] shadow-md hover:border-emerald-500/40 hover:shadow-lg"
                 }
                 ${plan.default ? "cursor-default" : "cursor-pointer"}

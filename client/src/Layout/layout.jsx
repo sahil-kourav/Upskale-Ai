@@ -25,7 +25,7 @@ export default function Layout() {
     dashboardPages;
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-white">
+    <div className="min-h-screen bg-[#0a0a0f] text-white">
 
       {!hideNavbar && <Navbar />}
 

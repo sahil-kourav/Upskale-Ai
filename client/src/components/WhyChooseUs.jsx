@@ -1,47 +1,80 @@
 import React from "react";
 import { FaHeadset, FaBullseye, FaChartLine } from "react-icons/fa";
 
-const reasons = [
+const highlights = [
   {
-    icon: <FaHeadset size={20} />,
-    title: "Real Interview Experience",
-    desc: "Voice-driven sessions that feel like the real thing, not a quiz.",
+    icon: FaHeadset,
+    title: "Practice Like A Real Interview",
+    desc: "Experience structured sessions with realistic questions and voice interaction.",
+    accent: "from-indigo-500 to-violet-500",
   },
+
   {
-    icon: <FaBullseye size={20} />,
-    title: "Personalized Feedback",
-    desc: "Feedback tied to your resume, role, and actual answers.",
+    icon: FaBullseye,
+    title: "Feedback That Matches Your Goals",
+    desc: "Insights generated from your resume, role requirements, and interview performance.",
+    accent: "from-purple-500 to-fuchsia-500",
   },
+
   {
-    icon: <FaChartLine size={20} />,
-    title: "Continuous Improvement",
-    desc: "Every session builds on the last, so progress is visible.",
+    icon: FaChartLine,
+    title: "See Progress Over Time",
+    desc: "Track readiness, confidence, and improvement across every attempt.",
+    accent: "from-emerald-500 to-cyan-500",
   },
 ];
 
 const WhyChooseUs = () => {
   return (
-    <section className="bg-[#0a0a12] py-16 sm:py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="font-serif text-3xl sm:text-4xl text-[#e4e1ed] tracking-[0.01em]">
-            Why choose our platform
+    <section className="relative py-28 overflow-hidden">
+      {/* Background */}
+
+      <div className="relative max-w-7xl mx-auto px-6">
+        {/* Heading */}
+
+        <div className="text-center max-w-3xl mx-auto">
+
+          <h2 className="mt-5 text-4xl lg:text-5xl font-bold text-white">
+            Why Candidates
+            <br />
+            Improve Faster
           </h2>
+
+          <p className="mt-5 text-zinc-400">
+            Built around preparation, feedback, and measurable progress.
+          </p>
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-5 sm:gap-6">
-          {reasons.map((r, i) => (
-            <div
-              key={i}
-              className="flex flex-col items-start gap-4 bg-[#0f0f1c]/60 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-colors duration-300"
-            >
-              <div className="w-11 h-11 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center">
-                {r.icon}
+        {/* Cards */}
+
+        <div className="grid md:grid-cols-3 gap-6 mt-16">
+          {highlights.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <div key={item.title} className="group">
+                <div className="relative rounded-[30px] border border-white/[0.06] bg-[#0d111b]/90 p-8 hover:-translate-y-2 transition">
+                  <div
+                    className={`absolute top-0 left-0 h-[3px] w-full bg-gradient-to-r ${item.accent}`}
+                  />
+
+                  <div
+                    className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.accent} flex items-center justify-center text-white text-2xl`}
+                  >
+                    <Icon />
+                  </div>
+
+                  <h3 className="mt-8 text-2xl text-white font-semibold">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-4 text-zinc-400 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-base font-semibold text-white">{r.title}</h3>
-              <p className="text-sm text-[#8080a0] leading-relaxed">{r.desc}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

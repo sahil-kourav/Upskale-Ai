@@ -1,112 +1,126 @@
+import React from "react";
+import { motion } from "motion/react";
+
 const features = [
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-      </svg>
-    ),
-    color: "indigo",
-    label: null,
-    title: "Resume Analysis",
-    desc: "Deep parse of your resume against role requirements. Surfaces hidden strengths and critical gaps instantly.",
+    category: "Resume",
+    icon: "📄",
+    title: "Resume Intelligence",
+    desc: "Evaluate resume structure, missing keywords, strengths, and role alignment.",
+    accent: "from-indigo-500 to-violet-500",
   },
+
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-      </svg>
-    ),
-    color: "purple",
-    label: null,
-    title: "Job Match Score",
-    desc: "Percentage score showing exactly how well your profile fits the role, powered by semantic similarity models.",
+    category: "Matching",
+    icon: "🎯",
+    title: "Role Match Analysis",
+    desc: "Measure profile fit and understand where improvements matter most.",
+    accent: "from-purple-500 to-fuchsia-500",
   },
+
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
-      </svg>
-    ),
-    color: "blue",
-    label: null,
-    title: "Skill Gap Analysis",
-    desc: "Identifies missing technologies or soft skills required by the job, with prioritized learning resources.",
+    category: "Skills",
+    icon: "📈",
+    title: "Skill Gap Detection",
+    desc: "Identify missing technical and communication skills before interviews.",
+    accent: "from-cyan-500 to-blue-500",
   },
+
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-      </svg>
-    ),
-    color: "green",
-    label: null,
-    title: "ATS Resume Builder",
-    desc: "Instant document formatting guaranteed to pass Workday, Greenhouse, and Lever automated screeners.",
+    category: "Resume",
+    icon: "🧾",
+    title: "ATS Resume Optimization",
+    desc: "Generate cleaner resume formats designed for better readability.",
+    accent: "from-emerald-500 to-teal-500",
   },
+
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
-      </svg>
-    ),
-    color: "pink",
-    label: null,
-    title: "Live AI Mock Interview",
-    desc: "Voice-based interview with real-time feedback, filler-word tracking, and a scored debrief report.",
+    category: "Interview",
+    icon: "🎙️",
+    title: "Interview Simulation",
+    desc: "Practice realistic interview sessions and receive instant evaluation.",
+    accent: "from-pink-500 to-rose-500",
   },
+
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-      </svg>
-    ),
-    color: "amber",
-    label: "Pro",
-    title: "AI Career Coach",
-    desc: "On-demand coaching sessions covering negotiation, career pivots, and leadership positioning.",
+    category: "Career",
+    icon: "🧠",
+    title: "Career Copilot",
+    desc: "Receive preparation suggestions and structured improvement guidance.",
+    accent: "from-amber-500 to-orange-500",
   },
 ];
 
-const colorMap = {
-  indigo: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
-  purple: "text-purple-400 bg-purple-500/10 border-purple-500/20",
-  blue: "text-blue-400 bg-blue-500/10 border-blue-500/20",
-  green: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-  pink: "text-pink-400 bg-pink-500/10 border-pink-500/20",
-  amber: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-};
-
 export default function Features() {
   return (
-    <section className="w-full max-w-7xl mx-auto py-28 relative" id="features">
-      <div className="relative px-6">
-        <div className="mb-16">
+    <section
+      id="features"
+      className="relative py-28 overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
 
-          <h2 className="text-3xl lg:text-4xl font-bold text-white text-center mb-3">What We Offer</h2>
-          <p className="text-[#9797b2] text-center">Tools built for serious software engineering candidates.</p>
+        <div className="text-center max-w-3xl mx-auto">
+          <span className="uppercase tracking-[0.25em] text-indigo-400 text-xs">
+            Capabilities
+          </span>
+
+          <h2 className="mt-5 text-4xl lg:text-5xl font-bold text-white">
+            Built To Improve
+            <br />
+            Every Stage Of Preparation
+          </h2>
+
+          <p className="mt-5 text-zinc-400">
+            Resume preparation, interview readiness, and structured improvement
+            in one workflow.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {features.map((f, i) => (
-            <div
-              key={i}
-              className="group relative bg-[#0f0f1c]/80 border border-white/5 rounded-2xl p-6 hover:border-white/10 hover:bg-[#12121f] hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-900/20 transition-all duration-300 backdrop-blur-sm"
+        {/* Grid */}
+
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 mt-16">
+          {features.map((item, index) => (
+            <motion.div
+              key={item.title}
+              initial={{
+                opacity: 0,
+                y: 25,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+              }}
+              transition={{
+                delay: index * 0.06,
+              }}
+              className="group"
             >
-              {/* Pro label */}
-              {f.label && (
-                <span className="absolute top-4 right-4 text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-md px-2 py-0.5 uppercase tracking-wide">
-                  Pro
-                </span>
-              )}
+              <div className="relative rounded-[30px] bg-[#0d111b]/90 border border-white/[0.06] p-7 hover:-translate-y-2 transition">
+                <div
+                  className={`absolute left-0 top-0 w-full h-[3px] rounded-full bg-gradient-to-r ${item.accent}`}
+                />
 
-              {/* Icon */}
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center border mb-4 ${colorMap[f.color]}`}>
-                {f.icon}
+                <div className="flex justify-between items-start">
+                  <div className="text-4xl">{item.icon}</div>
+
+                  <span className="text-xs text-zinc-500 uppercase">
+                    {item.category}
+                  </span>
+                </div>
+
+                <h3 className="mt-8 text-xl font-semibold text-white">
+                  {item.title}
+                </h3>
+
+                <p className="mt-4 text-zinc-400 leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
-
-              <h3 className="text-base font-semibold text-white mb-2">{f.title}</h3>
-              <p className="text-sm text-[#7070a0] leading-relaxed">{f.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

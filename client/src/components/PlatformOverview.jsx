@@ -1,73 +1,159 @@
 import React from "react";
 import { motion } from "motion/react";
-import { FaFileAlt, FaMicrophoneAlt, FaChartLine, FaRobot } from "react-icons/fa";
+import {
+  FaFileAlt,
+  FaMicrophoneAlt,
+  FaChartLine,
+  FaRobot,
+} from "react-icons/fa";
 
 const features = [
   {
-    icon: <FaFileAlt size={20} />,
-    title: "Resume Analysis",
-    desc: "Upload resume and receive AI-powered insights.",
-    color: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+    step: "01",
+    icon: FaFileAlt,
+    title: "Resume Intelligence",
+    desc:
+      "Upload your resume and discover ATS gaps, missing skills, and optimization opportunities.",
+
+    gradient:
+      "from-indigo-500 to-violet-500",
   },
+
   {
-    icon: <FaMicrophoneAlt size={20} />,
-    title: "Mock Interview",
-    desc: "Practice realistic interviews with instant feedback.",
-    color: "text-purple-400 bg-purple-500/10 border-purple-500/20",
+    step: "02",
+    icon: FaMicrophoneAlt,
+    title: "Interview Simulation",
+
+    desc:
+      "Practice realistic interviews and receive AI-powered evaluation instantly.",
+
+    gradient:
+      "from-purple-500 to-fuchsia-500",
   },
+
   {
-    icon: <FaChartLine size={20} />,
-    title: "Performance Reports",
-    desc: "Track communication, confidence, and improvement.",
-    color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+    step: "03",
+    icon: FaChartLine,
+    title: "Progress Tracking",
+
+    desc:
+      "Track confidence, communication, and improvement across sessions.",
+
+    gradient:
+      "from-emerald-500 to-cyan-500",
   },
+
   {
-    icon: <FaRobot size={20} />,
-    title: "AI Career Assistant",
-    desc: "Get guidance and recommendations.",
-    color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+    step: "04",
+    icon: FaRobot,
+    title: "Career Copilot",
+
+    desc:
+      "Receive personalized preparation paths and actionable guidance.",
+
+    gradient:
+      "from-amber-500 to-orange-500",
   },
 ];
 
 const PlatformOverview = () => {
   return (
-    <section id="overview" className="bg-[#0a0a12] py-16 sm:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="font-serif text-3xl sm:text-4xl text-[#e4e1ed] tracking-[0.01em]">
-            Everything you need, in one platform
+    <section
+      id="overview"
+      className="relative py-24 overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto px-6">
+
+        {/* Header */}
+
+        <div className="max-w-3xl mx-auto text-center mb-16">
+
+
+          <h2 className="mt-5 text-4xl lg:text-5xl font-bold text-white leading-tight">
+
+            One Platform.
+            <br />
+
+            Multiple Ways To Improve.
+
           </h2>
-          <p className="mt-3 text-[#908fa0] text-sm sm:text-base">
-            Four tools that work together to take you from resume to offer.
+
+          <p className="mt-5 text-zinc-400 text-lg">
+
+            From resume analysis to interview preparation —
+            everything works together to help candidates improve.
+
           </p>
+
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-          {features.map((f, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.06 }}
-              className="group relative bg-[#0f0f1c]/80 border border-white/5 rounded-2xl p-6 hover:border-white/10 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-900/20 transition-all duration-300"
-            >
-              <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center border mb-5 ${f.color}`}
+        {/* Cards */}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+          {features.map((item, index) => {
+            const Icon = item.icon;
+
+            return (
+              <motion.div
+                key={item.title}
+                initial={{
+                  opacity: 0,
+                  y: 30,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                }}
+                transition={{
+                  duration: 0.45,
+                  delay: index * 0.08,
+                }}
+                className="group"
               >
-                {f.icon}
-              </div>
+                <div className="relative h-full rounded-[28px] overflow-hidden border border-white/[0.06] bg-[#0d111b]/90 p-7 hover:-translate-y-2 transition duration-500">
 
-              <h3 className="text-base font-semibold text-white mb-2">
-                {f.title}
-              </h3>
+                  <div
+                    className={`absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r ${item.gradient}`}
+                  />
 
-              <p className="text-sm text-[#8080a0] leading-relaxed">
-                {f.desc}
-              </p>
-            </motion.div>
-          ))}
+                  <div className="flex items-center justify-between">
+
+                    <div
+                      className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white text-xl`}
+                    >
+                      <Icon />
+                    </div>
+
+                    <span className="text-zinc-600 font-bold">
+
+                      {item.step}
+
+                    </span>
+
+                  </div>
+
+                  <h3 className="mt-8 text-xl font-semibold text-white">
+
+                    {item.title}
+
+                  </h3>
+
+                  <p className="mt-4 text-zinc-400 leading-relaxed">
+
+                    {item.desc}
+
+                  </p>
+
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
+
       </div>
     </section>
   );
